@@ -29,7 +29,7 @@ sudo apt-get install -y openssh-blacklist
 sudo apt-get install -y fail2ban
 
 # Local config
-sudo cat /etc/fail2ban/jail.conf | sed 's/root@localhost/anders.weijnitz@gmail.com/g' > /tmp/jail.local
+sudo cat /etc/fail2ban/jail.conf | sed 's/root@localhost/your@email.com/g' > /tmp/jail.local
 sudo cp /tmp/jail.local /etc/fail2ban/jail.local
 
 # Start fail2ban
