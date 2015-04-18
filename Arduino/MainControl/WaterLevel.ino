@@ -11,5 +11,5 @@ numvar wl(void) {
 }
 
 unsigned int getWaterLevel() {
-  return sonar.ping() / US_ROUNDTRIP_CM;
+  return sonar.ping() * 10 / US_ROUNDTRIP_CM;
 }
