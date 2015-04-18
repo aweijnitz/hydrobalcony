@@ -20,7 +20,7 @@ numvar at(void) {
 }
 
 numvar ap(void) {
-  return getPressure();
+  return getSeaLevel();
 }
 
 numvar alt(void) {
@@ -89,3 +89,19 @@ double getAltitude() {
     return READ_ERROR;
 }
 
+double getSeaLevel() {
+  double T, P;
+  char result = bmp.startMeasurment();
+
+  if (result != 0) {
+    delay(result);
+    result = bmp.getTemperatureAndPressure(T, P);
+
+    if (result != 0)
+      return bmp.sealevel(P, bmp.altitude(P, P0));
+    else
+      return READ_ERROR;
+  }
+  else
+    return READ_ERROR;
+}
