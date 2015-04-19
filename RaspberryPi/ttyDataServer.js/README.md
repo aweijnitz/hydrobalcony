@@ -1,5 +1,5 @@
-# EmptyServer.js
-An Express4 server scaffold with focus on the server life-cycle.
+# ttyDataServer.js
+An Express4 server reading data from serial port (a tty) and relaying them as socket.io events
 
 Features
 
@@ -16,9 +16,6 @@ Features
     * Using [Mocha](http://visionmedia.github.io/mocha/) and [Should](https://github.com/visionmedia/should.js/)
 
 ## Install
-First clone/save this repo
-
-    cd EmptyServer
     mkdir logs
     mkdir uploadDir
 	npm install
