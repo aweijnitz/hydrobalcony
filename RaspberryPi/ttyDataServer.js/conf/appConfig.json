@@ -1,0 +1,15 @@
+{
+  "app": {
+    "webroot": "public",
+    "dataFile": "dataDir/ttyData.log",
+    "serialPort": {
+      "device": "/dev/tty.MockSerial",
+      "baudrate": 57600,
+      "buffer": 8
+    }
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 7878
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "replaceConsole": true,
+  "appenders": [
+    { "type": "console" },
+    {
+      "type": "file",
+      "filename": "./logs/server.log",
+      "maxLogSize": 1024,
+      "backups": 3
+    }
+  ]
+}
