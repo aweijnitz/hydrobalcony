@@ -47,16 +47,23 @@ var dataHandlerFactory = function (deviceHandler, dataLogFileName, socketIO, log
     var dataFile = dataLogFileName;
 
     return function dataHandler(ttyData) {
-        logger.debug('Serial Event Received! - ' + ttyData.time.format() + ' - ' + ttyData.data);
+//	logger.debug(util.inspect(ttyData));
+	if(ttyData && ttyData.data) {
+	    var colonIndex = ttyData.data.indexOf(':');
+	    if(colonIndex < 2 || colonIndex > 3) return;
+	    
+            // logger.debug('Serial Event Received! - ' + ttyData.time.format() + ' - ' + ttyData.data);
 
-        // Log to file, then send socket event
-        if (!!dataFile)
-            fs.appendFile(dataFile, (ttyData.time.format() + ' # ' + ttyData.data + '\n'), function (err) {
-                if (err) throw err;
-                socketEmit(ttyData, socketIO);
-            });
-        else
-            socketEmit(ttyData, socketIO);
+            // Log to file, then send socket event
+            if (!!dataFile)
+		fs.appendFile(dataFile, (ttyData.time.format() + ' # ' + ttyData.data + '\n'), function (err) {
+                    if (err) throw err;
+                    socketEmit(ttyData, socketIO);
+		});
+            else
+		socketEmit(ttyData, socketIO);
+	} else
+	    logger.debug('SKIPPED MESSAGE: '+util.inspect(ttyData));
     };
 };
 

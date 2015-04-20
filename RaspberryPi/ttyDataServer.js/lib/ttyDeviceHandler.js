@@ -2,6 +2,7 @@ var util = require("util");
 var EventEmitter = require("events").EventEmitter;
 var moment = require('moment');
 var SerialPort = require("serialport").SerialPort;
+var SerialPortLib = require("serialport");
 var MockSerial = require("./dev/MockSerialPort");
 var mockDataGenerator = require('./dev/mockSerialData');
 
@@ -31,16 +32,21 @@ var SerialPortHandler = function (device, baudrate, bufferSize) {
     else {
         serialPort = new SerialPort(device, {
             baudrate: (baudrate || 9600 ),
-            buffersize: (bufferSize || 128)
+            buffersize: (bufferSize || 128),
+	    dataBits : 8,
+	    parity : 'none',
+	    stopBits: 1,
+	    parser: SerialPortLib.parsers.readline("\n"),
+	    flowControl : false
         });
     }
-
+    
     this.tty = serialPort;
     this.latestData = null;
     var that = this;
     serialPort.on("open", function () {
         serialPort.on('data', function (data) {
-            that.emit('data', { data: data, time: moment() });
+            that.emit('data', { data: data.toString('ascii'), time: moment() });
         });
     });
 };
