@@ -11,7 +11,8 @@
 = pc: Pump Current (in mA)
 = at: Air Temperature (in degrees C * 1000)
 = ap: Air Pressure (in mBar at sea level)
-= alt: Altitued (in meters above sea level)
+= alt: Altitued (in meters above sea level). Currently not used
+= hb: heartbeat (timestamp in millis since boot)
 
 ==Logging functions==
 function pwl {printf("wl:%d\n", wl);};

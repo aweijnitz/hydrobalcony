@@ -27,6 +27,13 @@ var translatePropName = function (ttyData) {
         case 'ap':
             nameVal[0] = 'airPressure'
             break;
+        case 'pc':
+            nameVal[0] = 'pumpCurrent'
+            break;
+        case 'hb':
+            nameVal[0] = 'heartBeat'
+            break;
+
         default:
             break;
     }
@@ -34,11 +41,22 @@ var translatePropName = function (ttyData) {
     return nameVal;
 };
 
-var socketEmit = function socketEmit(ttyData, socketIO) {
+var processEvent = function processEvent(ttyData, socketIO) {
     socketIO.emit('data', {
         data: translatePropName(ttyData.data),
         time: ttyData.time.format()
     });
+};
+
+var logBuffer = [];
+var store = function storeData (ttyData, dataFile) {
+    logBuffer.push(ttyData.time.format() + ' # ' + ttyData.data);
+    if(logBuffer.length > 1200) // Buffer ca. 4-5 minutes of messages
+	fs.appendFile(dataFile, logBuffer.join('\n'), function (err) {
+            if (err) throw err;
+	});  
+    
+    logBuffer = []; // clear buffer
 };
 
 var dataHandlerFactory = function (deviceHandler, dataLogFileName, socketIO, log4js) {
@@ -49,19 +67,16 @@ var dataHandlerFactory = function (deviceHandler, dataLogFileName, socketIO, log
     return function dataHandler(ttyData) {
 //	logger.debug(util.inspect(ttyData));
 	if(ttyData && ttyData.data) {
+	    // Filter any garbage (ex. bitlash welcome message)
 	    var colonIndex = ttyData.data.indexOf(':');
 	    if(colonIndex < 2 || colonIndex > 3) return;
 	    
             // logger.debug('Serial Event Received! - ' + ttyData.time.format() + ' - ' + ttyData.data);
 
-            // Log to file, then send socket event
+            // Log to file and send socket event
             if (!!dataFile)
-		fs.appendFile(dataFile, (ttyData.time.format() + ' # ' + ttyData.data + '\n'), function (err) {
-                    if (err) throw err;
-                    socketEmit(ttyData, socketIO);
-		});
-            else
-		socketEmit(ttyData, socketIO);
+		store(ttyData, dataFile);
+	    processEvent(ttyData, socketIO);
 	} else
 	    logger.debug('SKIPPED MESSAGE: '+util.inspect(ttyData));
     };

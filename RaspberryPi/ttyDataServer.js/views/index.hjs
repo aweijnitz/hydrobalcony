@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{ title }}</title>
+    <title>Hydrouino Dream Balcony</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,20 +18,25 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <h1>{{ title }}</h1>
-
-            <h2>Whoa! Get it on below.</h2>
-
-            <form class="form-inline" role="form" method="POST" action="dostuff" enctype="text/plain">
-                <div class="form-group">
-                    <input type="text" class="form-control" name="commands" size="64">
-                    <input type="submit" class="btn btn-primary">
-                </div>
-            </form>
+            <h1>Hydrouino Dream Balcony</h1>
         </div>
+	<hr/>
     </div>
-    <div class="row" id="eventLog">
 
+    <div class="row" id="eventLog">
+      <table class="table table-striped">
+      <tr><td width='30%'><em>Light level</em></td><td class="col-md-12" id="light">waiting...</td></tr>
+      <tr><td><em>Water level</em></td><td class="col-md-12" id="waterLevel">waiting...</td></tr>
+      <tr><td><em>Water Temp</em></td><td class="col-md-12" id="waterTemp">waiting...</td></tr>
+      <tr><td><em>Air Temp (case)</em></td><td class="col-md-12" id="airTemp">waiting...</td></tr>
+      <tr><td><em>Air Pressure</em></td><td class="col-md-12" id="airPressure">waiting...</td></tr>
+      <tr><td><em>Pump Current Draw</em></td><td class="col-md-12" id="pumpCurrent">waiting...</td></tr>
+      <tr><td><em>Heartbeat</em></td><td class="col-md-12" id="heartBeat">waiting...</td></tr>
+      </table>
+    </div>
+
+
+    <div class="row" id="raweventLog">
     </div>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -42,8 +47,9 @@
     var hostURL = 'http://192.168.178.117:7878';
     var socket = io.connect(hostURL);
     socket.on('data', function (data) {
-        console.log(data);
-        $('#eventLog').append('<div>'+data.data[0]+' - '+data.data[1]+'</div>');
+       // console.log(data);
+       //$('#raweventLog').append('<div>'+data.data[0]+' : '+data.data[1]+'</div>');
+       $('#'+data.data[0]).html(data.data[1]);
     });
 </script>
 </body>
