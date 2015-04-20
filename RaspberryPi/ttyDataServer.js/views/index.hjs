@@ -35,7 +35,9 @@
       </table>
     </div>
 
-
+    <div class="row">
+      <img src="http://hydro.weekendhack.it/hydropic.jpg" class="img-responsive" alt="Hydro balcony. Image refreshed every 10min.">
+    </div>
     <div class="row" id="raweventLog">
     </div>
 </div>
