@@ -1,11 +1,17 @@
+==NOTE: Syntax of this file
+= This file will be machine read.
+= Comments must be on a a line by themselves AND
+= comment lines must start with '='.
+
+
 ==Monitoring functions==
-wl: Water Level (in mm, reversed. Actually distance to water from sensor above surface. Sensor located ~26cm above tank bottom)
-ll: Light Level (in a value 0-1023)
-wt: Water Temperature (in degrees C * 1000) NOTE: Slow function, ~1s per reading
-pc: Pump Current (in mA)
-at: Air Temperature (in degrees C * 1000)
-ap: Air Pressure (in mBar at sea level)
-alt: Altitued (in meters above sea level)
+= wl: Water Level (in mm, reversed. Actually distance to water from sensor above surface. Sensor located ~26cm above tank bottom)
+= ll: Light Level (in a value 0-1023)
+= wt: Water Temperature (in degrees C * 1000) NOTE: Slow function, ~1s per reading
+= pc: Pump Current (in mA)
+= at: Air Temperature (in degrees C * 1000)
+= ap: Air Pressure (in mBar at sea level)
+= alt: Altitued (in meters above sea level)
 
 ==Logging functions==
 function pwl {printf("wl:%d\n", wl);};
@@ -15,6 +21,13 @@ function ppc {printf("pc:%d\n", pc);};
 function pat {printf("at:%d\n", at);};
 function pap {printf("ap:%d\n", ap);};
 function palt {printf("alt:%d\n", alt);};
+
+==Heartbeat==
+function hb {printf("hb:%d\n", millis);};
+
+==Boot function, starting all logging automatically at power on==
+function startup {run hb,10000;run pwl,2000;run pll,60000;run pwt,60000;run ppc,250;run pat,30000;run pap,60000;};
+
 
 ==Pump control functions==
 rp: Run Pump
