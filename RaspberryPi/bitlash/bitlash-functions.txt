@@ -1,0 +1,27 @@
+==Monitoring functions==
+wl: Water Level (in mm, reversed. Actually distance to water from sensor above surface. Sensor located ~26cm above tank bottom)
+ll: Light Level (in a value 0-1023)
+wt: Water Temperature (in degrees C * 1000) NOTE: Slow function, ~1s per reading
+pc: Pump Current (in mA)
+at: Air Temperature (in degrees C * 1000)
+ap: Air Pressure (in mBar at sea level)
+alt: Altitued (in meters above sea level)
+
+==Logging functions==
+function pwl {printf("wl:%d\n", wl);};
+function pll {printf("ll:%d\n", ar(0));};
+function pwt {printf("wt:%d\n", wt);};
+function ppc {printf("pc:%d\n", pc);};
+function pat {printf("at:%d\n", at);};
+function pap {printf("ap:%d\n", ap);};
+function palt {printf("alt:%d\n", alt);};
+
+==Pump control functions==
+rp: Run Pump
+sp: Stop Pump
+tp: Toggle Pump
+
+==Examples==
+run pwl,2000
+run pll,2000
+run pwt,2000
