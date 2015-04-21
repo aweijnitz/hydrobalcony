@@ -46,7 +46,7 @@ var setupServer = function setupServer(appConf, logger) {
     app.use(function (req, res, next) {
         var err = new Error('Not Found');
         err.status = 404;
-        logger.debug(util.inspect(req));
+        //logger.debug(util.inspect(req));
         next(err);
     });
 
