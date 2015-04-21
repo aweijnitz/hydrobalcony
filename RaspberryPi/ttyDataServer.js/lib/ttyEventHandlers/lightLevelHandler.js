@@ -3,7 +3,7 @@ var MAX_SEEN_RAW = 566.0;
 
 
 var processData = function(eventData) {
-    return [eventData.data[0], (100.0*eventData.data/MAX_SEEN_RAW).toFixed(1)];
+    return [eventData[0], (100.0*eventData[1]/MAX_SEEN_RAW).toFixed(1)];
 };
 
 /**
@@ -13,8 +13,8 @@ var processData = function(eventData) {
  */
 var handler = function (eventData, socketIO, logger) {
     socketIO.emit('data', {
-        data: processData(eventData),
-        time: ttyData.time.format(),
+        data: processData(eventData.data),
+        time: eventData.time.format(),
         unit: '%'
     });
 };

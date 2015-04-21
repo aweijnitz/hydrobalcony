@@ -3,7 +3,7 @@ var EMPTY_LEVEL_RAW = 262; // Note: Fluctuating readings. Have seen 266 as well 
 
 
 var processData = function(eventData) {
-    return [eventData.data[0], ((EMPTY_LEVEL_RAW - eventData.data)/10).toFixed(1)];
+    return [eventData[0], ((EMPTY_LEVEL_RAW - eventData[1]/10)).toFixed(1)];
 };
 
 /**
@@ -14,8 +14,8 @@ var processData = function(eventData) {
 var handler = function (eventData, socketIO, logger) {
 
     socketIO.emit('data', {
-        data: processData(eventData),
-        time: ttyData.time.format(),
+        data: processData(eventData.data),
+        time: eventData.time.format(),
         unit: 'cm'
     });
 

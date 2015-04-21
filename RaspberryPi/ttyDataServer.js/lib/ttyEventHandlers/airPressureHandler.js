@@ -7,7 +7,7 @@
 var handler = function (eventData, socketIO, logger) {
     socketIO.emit('data', {
         data: eventData.data,
-        time: ttyData.time.format(),
+        time: eventData.time.format(),
         unit: 'mBar'
     });
 };

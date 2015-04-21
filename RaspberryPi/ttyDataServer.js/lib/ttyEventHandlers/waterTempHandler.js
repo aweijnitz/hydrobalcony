@@ -1,7 +1,7 @@
 
 
 var processData = function(eventData) {
-    return [eventData.data[0], (eventData.data/1000).toFixed(1)];
+    return [eventData[0], (eventData[1]/1000).toFixed(1)];
 };
 
 /**
@@ -11,8 +11,8 @@ var processData = function(eventData) {
  */
 var handler = function (eventData, socketIO, logger) {
     socketIO.emit('data', {
-        data: processData(eventData),
-        time: ttyData.time.format(),
+        data: processData(eventData.data),
+        time: eventData.time.format(),
         unit: 'C'
     });
 };
