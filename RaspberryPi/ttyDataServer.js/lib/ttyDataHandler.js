@@ -18,7 +18,7 @@ var translatePropName = require('./translatePropName');
  */
 var processEvent = function processEvent(ttyData, socketIO, logger) {
 
-    var dataName = translatePropName(ttyData);
+    var dataName = translatePropName(ttyData)[0];
     var handlerName = dataName + 'Handler';
     logger.debug('Invoking handler by name: '+handlerName);
     var handler = require('./ttyEventHandlers/'+handlerName)({
