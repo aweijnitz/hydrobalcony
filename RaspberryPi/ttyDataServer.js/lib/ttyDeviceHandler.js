@@ -6,6 +6,7 @@ var SerialPortLib = require("serialport");
 var MockSerial = require("./dev/MockSerialPort");
 var mockDataGenerator = require('./dev/mockSerialData');
 
+
 /**
  * Workaround to allow cross-platform development. Returns fake serial port object.
  */

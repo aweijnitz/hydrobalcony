@@ -1,51 +1,37 @@
 var os = require('os');
 var fs = require('fs');
-var all = require("promised-io/promise").all;
+var all = require('promised-io/promise').all;
 
 var path = require('path');
 var util = require('util');
 var moment = require('moment');
 
+var translatePropName = require('./translatePropName');
 
-var translatePropName = function (ttyData) {
-    var nameVal = ttyData.split(':').map(function (item) {
-        return item.trim();
-    });
-    switch (nameVal[0]) {
-        case 'll':
-            nameVal[0] = 'light'
-            break;
-        case 'wl':
-            nameVal[0] = 'waterLevel'
-            break;
-        case 'wt':
-            nameVal[0] = 'waterTemp'
-            break;
-        case 'at':
-            nameVal[0] = 'airTemp'
-            break;
-        case 'ap':
-            nameVal[0] = 'airPressure'
-            break;
-        case 'pc':
-            nameVal[0] = 'pumpCurrent'
-            break;
-        case 'hb':
-            nameVal[0] = 'heartBeat'
-            break;
+/**
+ * Look up and load event handler for ttyData and dispatch the event to the handler.
+ * The lookup is name based. See file translatePropName.js
+ *
+ * @param ttyData - Data event received over tty
+ * @param socketIO - Socket.io instance
+ * @param logger - log4js instance
+ */
+var processEvent = function processEvent(ttyData, socketIO, logger) {
 
-        default:
-            break;
-    }
+    var dataName = translatePropName(ttyData);
+    var handlerName = dataName + 'Handler';
+    logger.debug('Invoking handler by name: '+handlerName);
+    var handler = require('./ttyEventHandlers/'+handlerName)({
+        data: translatePropName(ttyData.data),
+        time: ttyData.time
+    }, socketIO, logger);
 
-    return nameVal;
-};
-
-var processEvent = function processEvent(ttyData, socketIO) {
+    /*
     socketIO.emit('data', {
         data: translatePropName(ttyData.data),
         time: ttyData.time.format()
     });
+    */
 };
 
 var logBuffer = [];
@@ -76,7 +62,7 @@ var dataHandlerFactory = function (deviceHandler, dataLogFileName, socketIO, log
             // Log to file and send socket event
             if (!!dataFile)
 		store(ttyData, dataFile);
-	    processEvent(ttyData, socketIO);
+	    processEvent(ttyData, socketIO, logger);
 	} else
 	    logger.debug('SKIPPED MESSAGE: '+util.inspect(ttyData));
     };

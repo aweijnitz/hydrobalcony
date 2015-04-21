@@ -20,23 +20,45 @@
         <div class="col-md-12">
             <h1>Hydrouino Dream Balcony</h1>
         </div>
-	<hr/>
+        <hr/>
     </div>
 
     <div class="row" id="eventLog">
-      <table class="table table-striped">
-      <tr><td width='30%'><em>Light level</em></td><td class="col-md-12" id="light">waiting...</td></tr>
-      <tr><td><em>Water level</em></td><td class="col-md-12" id="waterLevel">waiting...</td></tr>
-      <tr><td><em>Water Temp</em></td><td class="col-md-12" id="waterTemp">waiting...</td></tr>
-      <tr><td><em>Air Temp (case)</em></td><td class="col-md-12" id="airTemp">waiting...</td></tr>
-      <tr><td><em>Air Pressure</em></td><td class="col-md-12" id="airPressure">waiting...</td></tr>
-      <tr><td><em>Pump Current Draw</em></td><td class="col-md-12" id="pumpCurrent">waiting...</td></tr>
-      <tr><td><em>Heartbeat</em></td><td class="col-md-12" id="heartBeat">waiting...</td></tr>
-      </table>
+        <table class="table table-striped">
+            <tr>
+                <td width='30%'><em>Light level</em></td>
+                <td class="col-md-12" id="lightLevel">waiting...</td>
+            </tr>
+            <tr>
+                <td><em>Water level</em></td>
+                <td class="col-md-12" id="waterLevel">waiting...</td>
+            </tr>
+            <tr>
+                <td><em>Water Temp</em></td>
+                <td class="col-md-12" id="waterTemp">waiting...</td>
+            </tr>
+            <tr>
+                <td><em>Air Temp (case)</em></td>
+                <td class="col-md-12" id="airTemp">waiting...</td>
+            </tr>
+            <tr>
+                <td><em>Air Pressure</em></td>
+                <td class="col-md-12" id="airPressure">waiting...</td>
+            </tr>
+            <tr>
+                <td><em>Pump Current Draw</em></td>
+                <td class="col-md-12" id="pumpCurrent">waiting...</td>
+            </tr>
+            <tr>
+                <td><em>Heartbeat</em></td>
+                <td class="col-md-12" id="heartBeat">waiting...</td>
+            </tr>
+        </table>
     </div>
 
     <div class="row">
-      <img src="http://hydro.weekendhack.it/hydropic.jpg" class="img-responsive" alt="Hydro balcony. Image refreshed every 10min.">
+        <img src="http://hydro.weekendhack.it/hydropic.jpg" class="img-responsive"
+             alt="Hydro balcony. Image refreshed every 10min.">
     </div>
     <div class="row" id="raweventLog">
     </div>
@@ -44,16 +66,16 @@
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
 <script>
     var hostURL = 'ws://hydro.homelinux.net';
-//    var socket = io.connect(hostURL);
+    //    var socket = io.connect(hostURL);
     console.log('Connecting socket.io');
     var socket = io.connect();
     socket.on('data', function (data) {
-       // console.log(data);
-       //$('#raweventLog').append('<div>'+data.data[0]+' : '+data.data[1]+'</div>');
-       $('#'+data.data[0]).html(data.data[1]);
+        // console.log(data);
+        //$('#raweventLog').append('<div>'+data.data[0]+' : '+data.data[1]+'</div>');
+        $('#' + data.data[0]).html(data.data[1] + '&nbsp;' + data.unit);
     });
 </script>
 </body>
