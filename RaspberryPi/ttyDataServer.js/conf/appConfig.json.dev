@@ -9,7 +9,7 @@
     }
   },
   "server": {
-    "host": "192.168.178.117",
+    "host": "localhost",
     "port": 7878
   }
 }
