@@ -8,12 +8,12 @@ var processData = function(eventData) {
 
 /**
  * eventData - object with props 'data' and 'time'. data is an array with prop name and value. time is a moment() instance.
- * socketIO - socket.io instance to emit events on
+ * emitter - instance to emit() data events on
  * logger - log4js logger instance for logging
  */
-var handler = function (eventData, socketIO, logger) {
+var handler = function (eventData, emitter, logger) {
 
-    socketIO.emit('data', {
+    emitter.emit('data', {
         data: processData(eventData.data),
         time: eventData.time.format(),
         unit: 'cm'
