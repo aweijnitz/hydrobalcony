@@ -10,6 +10,7 @@ var shutdownHook = require('../lib/server/shutdownHook')(appConf, log4js);
 var SerialPortHandler = require('../lib/ttyDeviceHandler.js');
 var ttyDataHandler = require('../lib/ttyDataHandler.js');
 
+
 var fse = require('fs-extra');
 
 
@@ -71,7 +72,9 @@ prepServerStart(app).then(function (result) {
         appConf.app.serialPort.buffer);
 
     fse.ensureFileSync(appConf.app.dataFile);
-    tty.on('data', ttyDataHandler(tty, appConf.app.dataFile, io, log4js));
+
+    var handler = ttyDataHandler(tty, appConf.app.dataFile, io, log4js);
+    tty.on('data', handler);
 
 
 

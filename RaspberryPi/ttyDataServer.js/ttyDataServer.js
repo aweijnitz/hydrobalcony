@@ -39,7 +39,7 @@ var setupServer = function setupServer(appConf, logger) {
 
 
     logger.info('Setting application routes');
-    var routes = require('./routes/index');
+    var routes = require('./routes/index')(appConf, log4js, express.Router());
     app.use('/', routes);
 
 /// catch 404 and forwarding to error handler

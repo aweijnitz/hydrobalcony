@@ -11,7 +11,7 @@ var mockDataGenerator = require('./dev/mockSerialData');
  * Workaround to allow cross-platform development. Returns fake serial port object.
  */
 var mockSerialPort = function fakeSerialPort() {
-    return new MockSerial(mockDataGenerator, 1000);
+    return new MockSerial(mockDataGenerator, 500);
 };
 
 
