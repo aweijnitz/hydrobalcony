@@ -50,7 +50,7 @@
                 <td class="col-md-12" id="pumpCurrent">waiting...</td>
             </tr>
             <tr>
-                <td><em>Heartbeat</em></td>
+                <td><em>Uptime</em></td>
                 <td class="col-md-12" id="heartBeat">waiting...</td>
             </tr>
         </table>
