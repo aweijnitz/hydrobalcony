@@ -10,6 +10,8 @@ var shutdownHook = require('../lib/server/shutdownHook')(appConf, log4js);
 var SerialPortHandler = require('../lib/ttyDeviceHandler.js');
 var ttyDataHandler = require('../lib/ttyDataHandler.js');
 
+var fse = require('fs-extra');
+
 
 logger.info('Preparing server start.');
 
@@ -59,7 +61,7 @@ prepServerStart(app).then(function (result) {
     logger.info('Adding socket.io server');
     var io = require('socket.io')(server);
     io.on('connection', function (socket) {
-        socket.emit('clientConnect', { hello: 'world' });
+        socket.emit('clientConnect', { connectMsg: 'Welcome to the Hydrouino Garden!' });
     });
     app.set('socket.io', io);
 
@@ -68,6 +70,7 @@ prepServerStart(app).then(function (result) {
         appConf.app.serialPort.baudrate,
         appConf.app.serialPort.buffer);
 
+    fse.ensureFileSync(appConf.app.dataFile);
     tty.on('data', ttyDataHandler(tty, appConf.app.dataFile, io, log4js));
 
 
