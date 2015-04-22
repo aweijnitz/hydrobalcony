@@ -3,13 +3,13 @@
     "webroot": "public",
     "dataFile": "dataDir/ttyData.log",
     "serialPort": {
-      "device": "/dev/ttyUSB0",
+      "device": "/dev/tty.MockSerial",
       "baudrate": 57600,
       "buffer": 128
     }
   },
   "server": {
-    "host": "192.168.178.117",
+    "host": "localhost",
     "port": 7878
   }
 }
