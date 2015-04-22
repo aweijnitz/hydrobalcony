@@ -1,5 +1,16 @@
+var moment = require('moment');
+
+
 var processData = function(eventData) {
-    return [eventData[0], (eventData[1]/1000).toFixed(1)];
+
+    //console.log('HB HANDLER: '+eventData[1]);
+    var d = moment.duration(parseInt(eventData[1]));
+
+    return [eventData[0],
+        d.days() + ' days, ' +
+        d.hours() + ' hours, ' +
+        d.minutes() + ' minutes, ' +
+        d.seconds() + ' seconds'];
 };
 
 
@@ -11,8 +22,9 @@ var processData = function(eventData) {
 var handler = function (eventData, socketIO, logger) {
     socketIO.emit('data', {
         data: processData(eventData.data),
+        raw: eventData.data,
         time: eventData.time.format(),
-        unit: 's'
+        unit: ''
     });
 };
 
