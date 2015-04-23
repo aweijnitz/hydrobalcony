@@ -5,8 +5,8 @@
     {
       "type": "file",
       "filename": "./logs/server.log",
-      "maxLogSize": 1024,
-      "backups": 3
+      "maxLogSize": 10240,
+      "backups": 10
     }
   ]
 }

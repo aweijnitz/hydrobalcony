@@ -19,5 +19,19 @@ MockSerialPort.prototype.stop = function () {
     clearInterval(this.timerId);
 };
 
+MockSerialPort.prototype.close = function (cb) {
+    this.stop();
+    if (typeof cb === 'function') cb();
+};
+
+
+MockSerialPort.prototype.drain = function (cb) {
+    if (typeof cb === 'function') cb();
+};
+
+
+MockSerialPort.prototype.write = function (buffer, cb) {
+    if (typeof cb === 'function') cb();
+};
 
 module.exports = MockSerialPort;

@@ -20,21 +20,25 @@ var app = require('./lib/ttyDataServer')(appConf, log4js);
 
 
 var exitWithError = function (code, msg) {
-    logger.fatal(msg);
+    logger.warn(msg);
     process.exit(code);
 };
 
 // Configure graceful exits on SIGINT and SIGTERM
 //
-var mountShutdownHooks = function () {
+var mountShutdownHooks = function (tty, logger) {
     process.on('SIGINT', function () {
         logger.warn('Got SIGINT.  Shutting down');
+        logger.info('Closing serial port');
+        tty.close();
         shutdownHook('SIGINT');
         exitWithError(0, 'Server shutdown');
     });
 
     process.on('SIGTERM', function () {
         logger.WARN('Got SIGTERM.  Shutting down');
+        logger.info('Closing serial port');
+        tty.close();
         shutdownHook('SIGTERM');
         exitWithError(0, 'Server shutdown');
     });
@@ -46,9 +50,6 @@ prepServerStart(app).then(function (result) {
     // Check that prep went without errors (paranoid!)
     if (result instanceof Error)
         exitWithError(1, 'Failed to prepare server start! ' + util.inspect(result));
-
-    logger.info('Installing shutdown hook');
-    mountShutdownHooks();
 
     logger.info('Starting server');
     app.set('port', (appConf.server.port || process.env.PORT ) || 8080);
@@ -71,10 +72,24 @@ prepServerStart(app).then(function (result) {
         appConf.app.serialPort.baudrate,
         appConf.app.serialPort.buffer);
 
+
+    logger.info('Installing shutdown hook');
+    mountShutdownHooks(tty, logger);
+
     fse.ensureFileSync(appConf.app.dataFile);
 
     var handler = ttyDataHandler(tty, appConf.app.dataFile, io, log4js);
     tty.on('data', handler);
+    tty.on('close', function(err) {
+        logger.warn('Serial port closed!');
+        logger.error(util.inspect(err));
+    });
+    tty.on('error', function(err) {
+        logger.warn('Error on serial port!');
+        logger.error(util.inspect(err));
+    });
+
+
 
 
 
