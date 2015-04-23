@@ -1,6 +1,6 @@
 {
   "name": "ttyDataServer.js",
-  "description": "Server reflecting tty data events as Socket.io events.",
+  "description": "Server relaying tty data events as Socket.io events.",
   "version": "0.1.0",
   "private": false,
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "."
+    "url": "https://github.com/aweijnitz/hydrobalcony"
   },
   "keywords": [
     "Express4",

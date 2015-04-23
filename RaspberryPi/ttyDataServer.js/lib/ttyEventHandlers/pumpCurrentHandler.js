@@ -1,3 +1,12 @@
+/**
+ * The current sensor is unfortunately mounted in reverse, so we need to flip the sign to make it correct.
+ * @param eventData
+ * @returns {*[]}
+ */
+var processData = function(eventData) {
+    return [eventData[0], (-1*parseInt(eventData[1]))];
+};
+
 
 /**
  * eventData - object with props 'data' and 'time'. data is an array with prop name and value. time is a moment() instance.
@@ -6,7 +15,7 @@
  */
 var handler = function (eventData, emitter, logger) {
     emitter.emit('data', {
-        data: eventData.data,
+        data: processData(eventData.data),
         time: eventData.time.format(),
         unit: 'mA'
     });
