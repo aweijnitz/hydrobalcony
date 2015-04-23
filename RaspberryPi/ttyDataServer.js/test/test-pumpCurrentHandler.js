@@ -28,7 +28,7 @@ describe('pumpCurrentHandler', function () {
     });
 
 
-    it('Should reverse the sign of the current measurement', function (done) {
+    it('Should forward current measurement untouched', function (done) {
 
         handler({
             data: ['pumpCurrent', '-38'],
@@ -37,7 +37,7 @@ describe('pumpCurrentHandler', function () {
             emit: function (evtName, evtData) {
                 (evtName === 'data').should.be.true;
                 (evtData).should.have.property('data');
-                (parseInt(evtData.data[1]) == 38).should.be.true;
+                (parseInt(evtData.data[1]) == -38).should.be.true;
                 done();
             }
         }, mockLogger);
