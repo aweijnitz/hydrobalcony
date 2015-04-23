@@ -1,17 +1,20 @@
-var appConf = require('./conf/appConfig.json');
 var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
 var favicon = require('static-favicon');
-var util = require('util');
 
 
-var log4js = require('log4js');
-log4js.configure('./conf/log4js.json');
-var logger = log4js.getLogger('app');
+/**
+ * Configuration and creation of the Express 4 HTTP server.
+ * The server exposes a simple UI and some REST APIs.
+ *
+ * @param appConf - System config from /conf/appConf.json
+ * @param log4js - log4js instance
+ * @returns app - Configured Express 4 app (not listening)
+ */
+var setupServer = function setupServer(appConf, log4js) {
+    var logger = log4js.getLogger('server');
 
-
-var setupServer = function setupServer(appConf, logger) {
     var app = express();
     app.use(bodyParser.text({ type: 'text/plain' }));
 
@@ -20,7 +23,9 @@ var setupServer = function setupServer(appConf, logger) {
 
 
     logger.info('Configuring view engine');
-    app.set('views', path.join(__dirname, 'views'));
+//    app.set('views', path.join('..', 'views'));
+    logger.debug('views in: ',path.resolve('views'));
+    app.set('views', path.resolve('views'));
     app.set('view engine', 'hjs');
     app.use(favicon());
 
@@ -39,7 +44,7 @@ var setupServer = function setupServer(appConf, logger) {
 
 
     logger.info('Setting application routes');
-    var routes = require('./routes/index')(appConf, log4js, express.Router());
+    var routes = require('../routes/index')(appConf, log4js, express.Router());
     app.use('/', routes);
 
 /// catch 404 and forwarding to error handler
@@ -79,4 +84,4 @@ var setupServer = function setupServer(appConf, logger) {
 };
 
 
-module.exports = setupServer(appConf, logger);
+module.exports = setupServer;
