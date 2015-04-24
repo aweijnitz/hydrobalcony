@@ -1,12 +1,8 @@
-var appConf = require('../conf/appConfig.json');
-
-
-
 
 // Load route handlers (doubling as rudimentary MVC controllers)
 var rawLogHandler = require('./rawlog');
 var latestDataHandler = require('./latestDataHandler');
-
+var pumpControl = require('./startStopPumpHandler');
 
 
 var routerFactory = function router(appConf, log4js, router) {
@@ -17,7 +13,7 @@ var routerFactory = function router(appConf, log4js, router) {
     //
     router.get('/', function (req, res) {
         logger.debug('Serving / --> index.hjs');
-        res.render('index', {dummy: 'Hydroino Dream Balcony'});
+        res.render('index', {dummy: 'Hydrouino Dream Balcony'});
     });
 
     // Note: the data cache is setup when
@@ -25,7 +21,7 @@ var routerFactory = function router(appConf, log4js, router) {
 
     router.get('/rawlog', rawLogHandler(appConf, log4js));
 
-
+    router.get('/pump/:action?', pumpControl(appConf, log4js));
     return router;
 };
 

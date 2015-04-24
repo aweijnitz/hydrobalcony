@@ -61,6 +61,8 @@ var handleReq = function (appConf, log4js) {
                 if (err) throw err;
                 sendFile(res, appConf.app.dataFile, logger);
             });
+        else
+            logger.debug('No app.dataFile configured.');
     };
 
 };

@@ -31,6 +31,7 @@ MockSerialPort.prototype.drain = function (cb) {
 
 
 MockSerialPort.prototype.write = function (buffer, cb) {
+    process.stdout.write('SERIAL::WRITE '+buffer.toString()+'\n');
     if (typeof cb === 'function') cb();
 };
 

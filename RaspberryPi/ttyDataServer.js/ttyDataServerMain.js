@@ -9,12 +9,14 @@ var prepServerStart = require('./lib/server/prepareStart')(appConf, log4js);
 var shutdownHook = require('./lib/server/shutdownHook')(appConf, log4js);
 var SerialPortHandler = require('./lib/ttyDeviceHandler.js');
 var ttyDataHandler = require('./lib/ttyDataHandler.js');
-
-
 var fse = require('fs-extra');
 
 
 logger.info('Preparing server start.');
+appConf.controlKey = process.env.HYDRO_CONTROL_KEY || false;
+appConf.controlEnabled = process.env.HYDRO_CONTROL || false;
+
+!!appConf.controlEnabled ? logger.info('Control key found.') : logger.warn('No control enabling found. System in READ ONLY mode.');
 
 var app = require('./lib/ttyDataServer')(appConf, log4js);
 
@@ -71,6 +73,7 @@ prepServerStart(app).then(function (result) {
     var tty = new SerialPortHandler(appConf.app.serialPort.device,
         appConf.app.serialPort.baudrate,
         appConf.app.serialPort.buffer);
+    app.set('tty', tty);
 
 
     logger.info('Installing shutdown hook');
