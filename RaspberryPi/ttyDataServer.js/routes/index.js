@@ -21,7 +21,12 @@ var routerFactory = function router(appConf, log4js, router) {
 
     router.get('/rawlog', rawLogHandler(appConf, log4js));
 
-    router.get('/pump/:action?', pumpControl(appConf, log4js));
+    // Pump control REST API
+    var controller = pumpControl(appConf, log4js);
+    router.get('/pump', controller);
+    router.put('/pump/:action?',controller);
+    router.post('/pump/:action?', controller);
+
     return router;
 };
 
