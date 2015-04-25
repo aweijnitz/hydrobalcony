@@ -38,10 +38,10 @@ var mountShutdownHooks = function (tty, logger) {
     });
 
     process.on('SIGTERM', function () {
-        logger.WARN('Got SIGTERM.  Shutting down');
+        logger.warn('Got SIGTERM.  Shutting down');
+        shutdownHook('SIGTERM');
         logger.info('Closing serial port');
         tty.close();
-        shutdownHook('SIGTERM');
         exitWithError(0, 'Server shutdown');
     });
 };
@@ -113,5 +113,3 @@ prepServerStart(app).then(function (result) {
 }, function (err) { // Invoked if promised is rejected
     exitWithError(1, 'Preparation rejected. Failed to prepare server start! ' + util.inspect(result));
 });
-
-
