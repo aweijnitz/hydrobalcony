@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/cosmo/bootstrap.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/readable/bootstrap.min.css" rel="stylesheet">
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -17,13 +17,17 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <h1>Hydrouino Dream Balcony</h1>
         </div>
-        <hr/>
+        <div class="col-md-4">
+            <a href="/pumpschedule" class="btn btn-default pull-right">Pump Schedule</a>
+        </div>
+
     </div>
 
     <div class="row" id="eventLog">
+
         <table class="table table-striped">
             <tr>
                 <td width='30%'><em>Light level</em></td>

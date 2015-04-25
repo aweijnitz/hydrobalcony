@@ -3,7 +3,7 @@
 var rawLogHandler = require('./rawlog');
 var latestDataHandler = require('./latestDataHandler');
 var pumpControl = require('./startStopPumpHandler');
-
+var pumpSchedule = require('./pumpScheduleHandler');
 
 var routerFactory = function router(appConf, log4js, router) {
     var logger = log4js.getLogger("index");
@@ -26,6 +26,9 @@ var routerFactory = function router(appConf, log4js, router) {
     router.get('/pump', controller);
     router.put('/pump/:action?',controller);
     router.post('/pump/:action?', controller);
+
+    // Upcoming pump schedule
+    router.get('/pumpschedule', pumpSchedule(appConf, log4js));
 
     return router;
 };
