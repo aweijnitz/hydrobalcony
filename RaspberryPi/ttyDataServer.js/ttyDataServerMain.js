@@ -75,6 +75,12 @@ prepServerStart(app).then(function (result) {
         appConf.app.serialPort.buffer);
     app.set('tty', tty);
 
+    var pumpCtrl = require('./lib/control/PumpController').getPumpController(appConf, log4js, tty);
+    pumpCtrl.run();
+    pumpCtrl.on('error', function pumpErrorHandler(err) {
+        logger.error("Couldn't start pump");
+    });
+    app.set('pumpController', pumpCtrl);
 
     logger.info('Installing shutdown hook');
     mountShutdownHooks(tty, logger);

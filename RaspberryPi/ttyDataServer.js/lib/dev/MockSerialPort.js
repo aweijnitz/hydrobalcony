@@ -3,6 +3,9 @@ var EventEmitter = require("events").EventEmitter;
 
 
 var MockSerialPort = function (dataEvent, delay) {
+
+    EventEmitter.call(this);
+
     that = this;
     process.nextTick(function () {
         that.emit('open', true);
