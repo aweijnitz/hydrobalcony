@@ -2,7 +2,7 @@ var should = require('should');
 var util = require('util');
 
 var PumpController = require('../lib/control/PumpController').PumpController;
-var ttyDataHandler = require('../lib/ttyDataHandler.js');
+var ttyDeviceHandler = require('../lib/ttyDeviceHandler.js');
 
 
 var mockLogger = {
@@ -36,25 +36,65 @@ var schedule = {
         ]
 };
 
-var tty = ttyDataHandler({}, 'logFile', mockSocketIO, mockLogger);
-var pumpIntervalSecs = 20;
-var pumpForceStopAfterSecs = 40;
+var tty = new ttyDeviceHandler('/dev/tty.MockSerial', 100, 100);
+var pumpInterval = 10;
+var timeout = 40;
 
-describe('An empty test', function () {
+describe('PumpControl', function () {
     var ctrl;
 
-    before(function() {
-        ctrl = new PumpController(schedule, tty, pumpIntervalSecs, pumpForceStopAfterSecs, mockLogger);
+    beforeEach(function() {
+        ctrl = new PumpController(schedule, tty, pumpInterval, timeout, mockLogger);
     });
 
     it('Should be able to instantiate', function (done) {
+        ctrl.should.be.ok;
+        tty.should.be.ok;
         (ctrl.tty).should.equal(tty);
         done();
     });
 
-    it('Should start', function (done) {
-        ctrl.on('start', done);
+    it('start should emit event', function (done) {
+        ctrl.on('start', function(evtData) {
+            evtData.should.be.ok;
+            evtData.msg.should.exist;
+            evtData.msg.should.equal('Pump started');
+            done();
+        });
         ctrl.start();
+    });
+
+
+
+    it('stop should invoke callback', function (done) {
+        ctrl.stop(function() {
+            done();
+        });
+    });
+
+
+    it('start should invoke callback', function (done) {
+        ctrl.start(function() {
+            done();
+        });
+    });
+
+
+    it('stop shoudl emit event', function (done) {
+        ctrl.on('stop', function(evtData) {
+            evtData.should.be.ok;
+            evtData.msg.should.exist;
+            evtData.msg.should.equal('Pump stopped');
+            done();
+        });
+        ctrl.stop();
+    });
+
+    it('Should do start then stop when triggering', function (done) {
+        (ctrl.pumpInterval == pumpInterval).should.be.true;
+        ctrl.trigger(function() {
+            done();
+        });
     });
 
 });

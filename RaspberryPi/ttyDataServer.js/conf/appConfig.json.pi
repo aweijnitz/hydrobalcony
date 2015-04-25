@@ -8,7 +8,7 @@
       "buffer": 128
     },
     "pumpIntervalSecs": 20,
-    "pumpForceStopAfterSecs": 40,
+    "pumpTimeoutSecs": 40,
     "pumpScheduleFile": "./conf/pumpSchedule.json"
   },
   "server": {

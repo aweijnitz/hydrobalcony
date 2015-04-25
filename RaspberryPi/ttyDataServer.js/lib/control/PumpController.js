@@ -39,18 +39,15 @@ var pump = function pump(action, tty, callback, logger) {
 
 var singleton = null;
 
-var PumpController = function PumpController(schedule, tty, pumpIntervalSecs, pumpForceStopAfterSecs, log4js) {
+var PumpController = function PumpController(schedule, tty, interval, timeout, log4js) {
 
     EventEmitter.call(this);
     this.logger = log4js.getLogger('pumpController');
-    this.pumpInterval = pumpIntervalSecs * 1000;
-    this.maxRun = pumpForceStopAfterSecs * 1000;
+    this.pumpInterval = interval;
+    this.maxRun = timeout * 1000;
     this.schedule = schedule;
     this.tty = tty;
     this.running = undefined;
-
-    if(!tty)
-        logger.warn('NO TTY');
     // Use local time zone (UTC is default)
     later.date.localTime();
     this.logger.info('PumpController initialized');
@@ -73,7 +70,6 @@ PumpController.prototype.start = function (callback) {
     this.logger.info('Starting pump');
     var that = this;
     var tty = this.tty;
-    console.log('TTY: '+(!!tty));
     pump(true, tty, function(err) {
         if(!!err) {
             that.logger.error('Could not start pump! err: '+util.inspect(err));
@@ -83,6 +79,7 @@ PumpController.prototype.start = function (callback) {
             that.running = true;
             that.emit('start', { msg: 'Pump started' });
             that.logger.debug('Pump started.');
+            if(isCallback(callback)) callback();
         }
     }, this.logger);
 };
@@ -104,7 +101,7 @@ PumpController.prototype.stop = function (callback) {
     }, this.logger);
 };
 
-PumpController.prototype.triggerPump = function (callback) {
+PumpController.prototype.trigger = function (callback) {
     this.logger.info('Triggering pump');
     this.emit('trigger', { msg: 'Triggering pump.', duration: this.pumpInterval, time: new Date() });
     var that = this;
@@ -126,8 +123,9 @@ PumpController.prototype.run = function () {
             that.logger.error('Could not start pump', util.inspect(err));
         } else {
             that.logger.info('Starting pump controller schedule');
+            that.logger.info('Next pump run at: '+that.upcomingTimes(1));
             that.scheduleId = later.setInterval(function triggerJob() {
-                that.triggerPump();
+                that.trigger();
             }, that.schedule);
         }
     });
@@ -144,11 +142,11 @@ var getOrCreateController = function getOrCreateController(appConf, log4js, tty)
     if (!!singleton)
         return singleton;
     else {
-        var pumpRunInterval = appConf.app.pumpIntervalSecs || 20;
-        var pumpForceStopAfterSecs = appConf.app.pumpForceStopAfterSecs || 40;
+        var pumpRunInterval = (appConf.app.pumpIntervalSecs * 1000) || 20*1000;
+        var timeout = appConf.app.pumpTimeoutSecs * 1000 || 40*1000;
         var scheduleFile = path.resolve(appConf.app.pumpScheduleFile);
-        var scheduleData = fs.readFileSync(scheduleFile);
-        singleton = new PumpController(scheduleData, tty, pumpRunInterval, pumpForceStopAfterSecs, log4js);
+        var scheduleData = JSON.parse(fs.readFileSync(scheduleFile).toString());
+        singleton = new PumpController(scheduleData, tty, pumpRunInterval, pumpRunInterval, log4js);
         return singleton;
     }
 };

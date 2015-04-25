@@ -92,7 +92,7 @@ SerialPortHandler.prototype.drain = function (cb) {
 
 
 SerialPortHandler.prototype.write = function (buffer, cb) {
-    process.stdout.write('SerialPortHandler -> SERIAL::WRITE ' + buffer.toString() + '\n');
+    //process.stdout.write('SerialPortHandler -> SERIAL::WRITE ' + buffer.toString() + '\n');
     this.tty.write(buffer, cb);
 };
 
