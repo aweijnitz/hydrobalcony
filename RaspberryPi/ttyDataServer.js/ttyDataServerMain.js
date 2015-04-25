@@ -74,27 +74,31 @@ prepServerStart(app).then(function (result) {
         appConf.app.serialPort.baudrate,
         appConf.app.serialPort.buffer);
     app.set('tty', tty);
+    
+    tty.on('open', function(msg) {
+	logger.info('Serial device open. --> Initializing pump controller ');
+	var pumpCtrl = require('./lib/control/PumpController').getPumpController(appConf, log4js, tty);
+	pumpCtrl.on('error', function pumpErrorHandler(err) {
+            logger.error("Couldn't start pump");
+	});
+	pumpCtrl.on('start', function onStart(evtData) {
+            io.emit('pumpStart', evtData);
+	});
+	pumpCtrl.on('stop', function onStart(evtData) {
+            io.emit('pumpStop', evtData);
+	});
 
-    var pumpCtrl = require('./lib/control/PumpController').getPumpController(appConf, log4js, tty);
-    pumpCtrl.on('error', function pumpErrorHandler(err) {
-        logger.error("Couldn't start pump");
+	app.set('pumpController', pumpCtrl);
+	logger.info('Starting pump schedule');
+	pumpCtrl.run();
     });
-    pumpCtrl.on('start', function onStart(evtData) {
-        io.emit('pumpStart', evtData);
-    });
-    pumpCtrl.on('stop', function onStart(evtData) {
-        io.emit('pumpStop', evtData);
-    });
-
-    app.set('pumpController', pumpCtrl);
-    pumpCtrl.run();
-
 
     logger.info('Installing shutdown hook');
     mountShutdownHooks(tty, logger);
 
     fse.ensureFileSync(appConf.app.dataFile);
 
+    logger.info('Initializing serial data handler');
     var handler = ttyDataHandler(tty, appConf.app.dataFile, io, log4js);
     tty.on('data', handler);
     tty.on('close', function(err) {

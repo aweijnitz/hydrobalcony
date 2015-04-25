@@ -3,7 +3,7 @@
     "webroot": "public",
     "dataFile": "dataDir/ttyData.log",
     "serialPort": {
-      "device": "/dev/tty.MockSerial",
+      "device": "/dev/ttyUSB0",
       "baudrate": 57600,
       "buffer": 128
     },
@@ -12,7 +12,7 @@
     "pumpScheduleFile": "./conf/pumpSchedule.json"
   },
   "server": {
-    "host": "localhost",
+    "host": "192.168.178.117",
     "port": 7878
   }
 }

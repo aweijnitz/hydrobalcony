@@ -27,6 +27,7 @@ var SerialPortHandler = function (device, baudrate, bufferSize) {
     EventEmitter.call(this);
 
     var serialPort = null;
+    var openImmediately = true;
 
     if (device === '/dev/tty.MockSerial')
         serialPort = mockSerialPort();
@@ -39,7 +40,7 @@ var SerialPortHandler = function (device, baudrate, bufferSize) {
             stopBits: 1,
             parser: SerialPortLib.parsers.readline("\n"),
             flowControl: false
-        });
+        }, openImmediately);
     }
 
     this.tty = serialPort;
@@ -60,6 +61,7 @@ var SerialPortHandler = function (device, baudrate, bufferSize) {
             that.state = 'error';
             that.emit('error', err);
         });
+	that.emit('open', { state: 'open'});
     });
 };
 
