@@ -58,14 +58,14 @@ prepServerStart(app).then(function (result) {
     app.set('host', (appConf.server.host || process.env.HOST ) || 'localhost');
 
     var server = app.listen(app.get('port'), app.get('host'), function () {
-        logger.info('Server listening: '+ util.inspect(server.address()));
+        logger.info('Server listening: ' + util.inspect(server.address()));
     });
 
 
     logger.info('Adding socket.io server');
     var io = require('socket.io')(server);
     io.on('connection', function (socket) {
-        socket.emit('clientConnect', { connectMsg: 'Welcome to the Hydrouino Garden!' });
+        socket.emit('clientConnect', {connectMsg: 'Welcome to the Hydrouino Garden!'});
     });
     app.set('socket.io', io);
 
@@ -74,23 +74,28 @@ prepServerStart(app).then(function (result) {
         appConf.app.serialPort.baudrate,
         appConf.app.serialPort.buffer);
     app.set('tty', tty);
-    
-    tty.on('open', function(msg) {
-	logger.info('Serial device open. --> Initializing pump controller ');
-	var pumpCtrl = require('./lib/control/PumpController').getPumpController(appConf, log4js, tty);
-	pumpCtrl.on('error', function pumpErrorHandler(err) {
-            logger.error("Couldn't start pump");
-	});
-	pumpCtrl.on('start', function onStart(evtData) {
-            io.emit('pumpStart', evtData);
-	});
-	pumpCtrl.on('stop', function onStart(evtData) {
-            io.emit('pumpStop', evtData);
-	});
 
-	app.set('pumpController', pumpCtrl);
-	logger.info('Starting pump schedule');
-	pumpCtrl.run();
+    tty.on('open', function (msg) {
+        logger.info('Serial device open. --> Initializing pump controller ');
+        var pumpCtrl = require('./lib/control/PumpController').getPumpController(appConf, log4js, tty);
+        latestDataCache = require('./lib/dataCache')(null, log4js);
+
+        pumpCtrl.on('error', function pumpErrorHandler(err) {
+            logger.error("Couldn't start pump");
+        });
+        pumpCtrl.on('start', function onStart(evtData) {
+            latestDataCache.put('pump', evtData.state);
+            io.emit('pump', evtData);
+        });
+        pumpCtrl.on('stop', function onStop(evtData) {
+            latestDataCache.put('pump', evtData.state);
+            io.emit('pump', evtData);
+        });
+
+        app.set('pumpController', pumpCtrl);
+        logger.info('Starting pump schedule');
+        pumpCtrl.run();
+
     });
 
     logger.info('Installing shutdown hook');
@@ -101,17 +106,14 @@ prepServerStart(app).then(function (result) {
     logger.info('Initializing serial data handler');
     var handler = ttyDataHandler(tty, appConf.app.dataFile, io, log4js);
     tty.on('data', handler);
-    tty.on('close', function(err) {
+    tty.on('close', function (err) {
         logger.warn('Serial port closed!');
         logger.error(util.inspect(err));
     });
-    tty.on('error', function(err) {
+    tty.on('error', function (err) {
         logger.warn('Error on serial port!');
         logger.error(util.inspect(err));
     });
-
-
-
 
 
 }, function (err) { // Invoked if promised is rejected

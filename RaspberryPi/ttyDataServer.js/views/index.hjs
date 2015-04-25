@@ -54,6 +54,10 @@
                 <td class="col-md-12" id="pumpCurrent">waiting...</td>
             </tr>
             <tr>
+                <td><em>Pump State</em></td>
+                <td class="col-md-12" id="pumpState">waiting...</td>
+            </tr>
+            <tr>
                 <td><em>Uptime</em></td>
                 <td class="col-md-12" id="heartBeat">waiting...</td>
             </tr>

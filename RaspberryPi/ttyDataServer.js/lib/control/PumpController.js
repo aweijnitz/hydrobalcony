@@ -77,7 +77,7 @@ PumpController.prototype.start = function (callback) {
             if(isCallback(callback)) callback(err);
         } else {
             that.running = true;
-            that.emit('start', { msg: 'Pump started' });
+            that.emit('start', { msg: 'Pump started', state: 'on' });
             that.logger.debug('Pump started.');
             if(isCallback(callback)) callback();
         }
@@ -94,7 +94,7 @@ PumpController.prototype.stop = function (callback) {
             if(isCallback(callback)) callback(err);
         } else {
             that.running = false;
-            that.emit('stop', { msg: 'Pump stopped' });
+            that.emit('stop', { msg: 'Pump stopped', state: 'off' });
             that.logger.debug('Pump stopped.');
             if(isCallback(callback)) callback();
         }
