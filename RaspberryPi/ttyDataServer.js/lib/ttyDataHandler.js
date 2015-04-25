@@ -46,7 +46,7 @@ var processEvent = function processEvent(ttyData, eventEmitter, logger) {
 
     var dataName = translatePropName(ttyData.data)[0];
     var handlerName = dataName + 'Handler';
-    logger.debug('Looking up handler: '+handlerName);
+
     try {
 	var result = require('./ttyEventHandlers/' + handlerName)({
             data: translatePropName(ttyData.data),
