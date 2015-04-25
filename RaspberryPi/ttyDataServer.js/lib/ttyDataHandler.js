@@ -46,10 +46,15 @@ var processEvent = function processEvent(ttyData, eventEmitter, logger) {
 
     var dataName = translatePropName(ttyData.data)[0];
     var handlerName = dataName + 'Handler';
-    var result = require('./ttyEventHandlers/' + handlerName)({
-        data: translatePropName(ttyData.data),
-        time: ttyData.time
-    }, eventEmitter, logger);
+    logger.debug('Looking up handler: '+handlerName);
+    try {
+	var result = require('./ttyEventHandlers/' + handlerName)({
+            data: translatePropName(ttyData.data),
+            time: ttyData.time
+	}, eventEmitter, logger);
+    } catch(e) {
+	logger.error('No handler found for '+dataName);
+    }
 
 };
 

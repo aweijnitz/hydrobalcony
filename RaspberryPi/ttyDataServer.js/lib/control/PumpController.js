@@ -22,13 +22,13 @@ var pump = function pump(action, tty, callback, logger) {
     if (!!tty) {
         logger.debug('Writing to serial');
         if (action)
-            writeAndDrain(tty, new Buffer('rp', 'ascii'), function (err) {
+            writeAndDrain(tty, new Buffer('rp\n', 'ascii'), function (err) {
                 logger.debug('Sent command: rp');
                 if(isCallback(callback))
                     callback(err);
             });
         else
-            writeAndDrain(tty, new Buffer('sp', 'ascii'), function (err) {
+            writeAndDrain(tty, new Buffer('sp\n', 'ascii'), function (err) {
                 logger.debug('Sent command: sp');
                 if(isCallback(callback))
                     callback(err);
