@@ -83,4 +83,17 @@ SerialPortHandler.prototype.close = function (cb) {
 };
 
 
+SerialPortHandler.prototype.drain = function (cb) {
+    if (typeof cb === 'function')
+        this.tty.drain(cb);
+    else
+        this.tty.drain();
+};
+
+
+SerialPortHandler.prototype.write = function (buffer, cb) {
+    process.stdout.write('SerialPortHandler -> SERIAL::WRITE ' + buffer.toString() + '\n');
+    this.tty.write(buffer, cb);
+};
+
 module.exports = SerialPortHandler;
