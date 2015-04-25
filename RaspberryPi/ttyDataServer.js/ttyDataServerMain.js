@@ -31,17 +31,17 @@ var exitWithError = function (code, msg) {
 var mountShutdownHooks = function (tty, logger) {
     process.on('SIGINT', function () {
         logger.warn('Got SIGINT.  Shutting down');
+        shutdownHook('SIGINT');
         logger.info('Closing serial port');
         tty.close();
-        shutdownHook('SIGINT');
         exitWithError(0, 'Server shutdown');
     });
 
     process.on('SIGTERM', function () {
-        logger.WARN('Got SIGTERM.  Shutting down');
+        logger.warn('Got SIGTERM.  Shutting down');
+        shutdownHook('SIGTERM');
         logger.info('Closing serial port');
         tty.close();
-        shutdownHook('SIGTERM');
         exitWithError(0, 'Server shutdown');
     });
 };
@@ -75,6 +75,20 @@ prepServerStart(app).then(function (result) {
         appConf.app.serialPort.buffer);
     app.set('tty', tty);
 
+    var pumpCtrl = require('./lib/control/PumpController').getPumpController(appConf, log4js, tty);
+    pumpCtrl.on('error', function pumpErrorHandler(err) {
+        logger.error("Couldn't start pump");
+    });
+    pumpCtrl.on('start', function onStart(evtData) {
+        io.emit('pumpStart', evtData);
+    });
+    pumpCtrl.on('stop', function onStart(evtData) {
+        io.emit('pumpStop', evtData);
+    });
+
+    app.set('pumpController', pumpCtrl);
+    pumpCtrl.run();
+
 
     logger.info('Installing shutdown hook');
     mountShutdownHooks(tty, logger);
@@ -99,5 +113,3 @@ prepServerStart(app).then(function (result) {
 }, function (err) { // Invoked if promised is rejected
     exitWithError(1, 'Preparation rejected. Failed to prepare server start! ' + util.inspect(result));
 });
-
-

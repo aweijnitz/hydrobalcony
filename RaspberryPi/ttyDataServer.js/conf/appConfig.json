@@ -6,7 +6,10 @@
       "device": "/dev/tty.MockSerial",
       "baudrate": 57600,
       "buffer": 128
-    }
+    },
+    "pumpIntervalSecs": 20,
+    "pumpTimeoutSecs": 40,
+    "pumpScheduleFile": "./conf/pumpSchedule.json"
   },
   "server": {
     "host": "localhost",
