@@ -147,6 +147,16 @@ var getOrCreateController = function getOrCreateController(appConf, log4js, tty)
         var scheduleFile = path.resolve(appConf.app.pumpScheduleFile);
         var scheduleData = JSON.parse(fs.readFileSync(scheduleFile).toString());
         singleton = new PumpController(scheduleData, tty, pumpRunInterval, pumpRunInterval, log4js);
+
+        // Enable hot reload for schedule conf file
+        fs.watch(scheduleFile,{ persistent: true, recursive: false },function(event, filename) {
+            var logger = log4js.getLogger('pumpFileWatch');
+            logger.info('Reloading schedule config file from '+filename);
+            var scheduleData = JSON.parse(fs.readFileSync(scheduleFile).toString());
+            singleton = null;
+            singleton = new PumpController(scheduleData, tty, pumpRunInterval, pumpRunInterval, log4js);
+        });
+
         return singleton;
     }
 };
