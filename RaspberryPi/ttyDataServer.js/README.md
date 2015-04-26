@@ -42,7 +42,7 @@ on the Pi](conf/appConf.json.pi). Just copy the appropriate one to ```appConf.js
 shouldn't have to worry about anything.
 
 ### Pump schedule configuration
-When the pump runs and exeptions to the schedule are determined by the
+When the pump runs and any exeptions to the schedule are determined by the
 contents of the file [pumpSchedule.json](conf/pumpSchedule.json).
 Internally [later.js](http://bunkat.github.io/later/) is used and the
 config is just passed along as a
