@@ -49,8 +49,8 @@ config is just passed along as a
 [schedule](http://bunkat.github.io/later/schedules.html) to
 ```later```.
 
-The file is watched for changes and **the pump schedule is reloaded on the
-fly if the file is modified**.
+The file is watched for changes and the pump schedule is reloaded on the
+fly if the file is modified.
 
 ## Endpoints
 
@@ -79,7 +79,7 @@ the pump.
 
 To deactivate the pump, POST to ```http://[my host]/pump/off?key=[myAPIKey]```.
 
-See [startStopÅumpHandler](routes/startStopPumpHandler.js) for details.
+See [startStopPumpHandler](routes/startStopPumpHandler.js) for details.
 
 ### Se upcoming pump schedule
 
