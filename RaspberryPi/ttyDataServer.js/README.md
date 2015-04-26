@@ -68,6 +68,7 @@ PUT:ing or POST:ing. The key must match the content of the environment
 variable ```HYDRO_CONTROL_KEY```.
 
 **Example**
+
 Put this in .bashrc
 
     export HYDRO_CONTROL=true
@@ -80,7 +81,7 @@ To deactivate the pump, POST to ```http://[my host]/pump/off?key=[myAPIKey]```.
 
 See [startStopPumpHandler](routes/startStopPumpHandler.js) for details.
 
-### Se upcoming pump schedule
+### List upcoming pump schedule
 
     http://localhost:7878/pumpschedule?count=16
 
