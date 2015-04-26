@@ -33,12 +33,12 @@ An Express4 server reading Arduino sensor data from serial port (a tty) and rela
 ### Configuration
 
 #### Application configuration
-The main config file is [appConf.json](conf/appConf.json) and it should be more or
+The main config file is [appConf.json](conf/appConfig.json) and it should be more or
 less self-explanatory. The most important thing to set up is the tty
 device. For development use ```/dev/tty.MockSerial```. There are two
 ready-made examples included -
-[one for development](conf/appConf.json.dev) and [one for running
-on the Pi](conf/appConf.json.pi). Just copy the appropriate one to ```appConf.json``` and you
+[one for development](conf/appConfig.json.dev) and [one for running
+on the Pi](conf/appConfig.json.pi). Just copy the appropriate one to ```appConf.json``` and you
 shouldn't have to worry about anything.
 
 ### Pump schedule configuration
