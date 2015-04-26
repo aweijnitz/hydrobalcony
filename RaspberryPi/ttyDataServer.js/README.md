@@ -46,8 +46,7 @@ When the pump runs and exeptions to the schedule are determined by the
 contents of the file [pumpSchedule.json](conf/pumpSchedule.json).
 Internally [later.js](http://bunkat.github.io/later/) is used and the
 config is just passed along as a
-[schedule](http://bunkat.github.io/later/schedules.html) to
-```later```.
+[schedule](http://bunkat.github.io/later/schedules.html) to ```later```.
 
 The file is watched for changes and the pump schedule is reloaded on the
 fly if the file is modified.
