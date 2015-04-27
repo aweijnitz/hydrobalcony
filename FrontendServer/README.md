@@ -1,4 +1,4 @@
 # Frontend Server
 
-This part of the repo contains the system parts that are responisble
+This part contains the system components responisble
 for reporting, analysis and UI.

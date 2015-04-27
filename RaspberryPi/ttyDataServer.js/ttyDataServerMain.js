@@ -85,10 +85,14 @@ prepServerStart(app).then(function (result) {
         });
         pumpCtrl.on('start', function onStart(evtData) {
             latestDataCache.put('pump', evtData.state);
+            // Normlize event to look like the regular sensor events
+            eventData.data = ['pump', 1];
             io.emit('pump', evtData);
         });
         pumpCtrl.on('stop', function onStop(evtData) {
             latestDataCache.put('pump', evtData.state);
+            // Normlize event to look like the regular sensor events
+            eventData.data = ['pump', 0];
             io.emit('pump', evtData);
         });
 

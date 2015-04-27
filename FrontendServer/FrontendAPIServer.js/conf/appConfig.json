@@ -1,11 +1,14 @@
 {
     "app": {
-        "webroot": "public",
-        "uploadDir": "uploadDir",
-        "maxTotalUploadSizePerRequestInMB": 10,
-        "maxFileSizeMB": 5
+      "webroot": "public",
+      "dataServer": "hydro.homelinux.net",
+      "dbHost": "localhost",
+      "dbPort": "28015",
+      "dbName": "hydro",
+      "sensorTableName": "sensordata",
+      "dbAuthKey": ""
     },
     "server": {
-        "port": 8080
+        "port": 7979
     }
 }

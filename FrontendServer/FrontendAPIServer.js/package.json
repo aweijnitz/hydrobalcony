@@ -27,7 +27,10 @@
     "log4js": "^0.6.16",
     "moment": "~2.10.2",
     "promised-io": "^0.3.4",
+    "q": "^1.3.0",
+    "rethinkdbdash": "^2.0.9",
     "socket.io": "^1.3.5",
+    "socket.io-client": "^1.3.5",
     "static-favicon": "~1.0.0"
   },
   "devDependencies": {
