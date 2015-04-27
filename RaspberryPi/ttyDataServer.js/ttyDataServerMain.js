@@ -2,7 +2,7 @@ var util = require('util');
 var path = require('path');
 var appConf = require('./conf/appConfig.json');
 var log4js = require('log4js');
-log4js.configure('./conf/log4js.json');
+log4js.configure(path.resolve(__dirname + '/conf/log4js.json'));
 
 var logger = log4js.getLogger('MAIN');
 var prepServerStart = require('./lib/server/prepareStart')(appConf, log4js);
