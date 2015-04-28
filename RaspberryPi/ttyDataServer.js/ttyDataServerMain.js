@@ -12,6 +12,11 @@ var ttyDataHandler = require('./lib/ttyDataHandler.js');
 var fse = require('fs-extra');
 
 
+var timeStampEvt = function(evt) {
+    evt.timestamp = new Date();
+    return evt;
+}; 
+
 logger.info('Preparing server start.');
 appConf.controlKey = process.env.HYDRO_CONTROL_KEY || false;
 appConf.controlEnabled = process.env.HYDRO_CONTROL || false;
@@ -87,13 +92,13 @@ prepServerStart(app).then(function (result) {
             latestDataCache.put('pump', evtData.state);
             // Normlize event to look like the regular sensor events
             eventData.data = ['pump', 1];
-            io.emit('pump', evtData);
+            io.emit('pump', timeStampEvt(evtData));
         });
         pumpCtrl.on('stop', function onStop(evtData) {
             latestDataCache.put('pump', evtData.state);
             // Normlize event to look like the regular sensor events
             eventData.data = ['pump', 0];
-            io.emit('pump', evtData);
+            io.emit('pump', timeStampEvt(evtData));
         });
 
         app.set('pumpController', pumpCtrl);
