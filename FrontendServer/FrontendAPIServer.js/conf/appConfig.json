@@ -2,11 +2,17 @@
     "app": {
       "webroot": "public",
       "dataServer": "hydro.homelinux.net",
-      "dbHost": "localhost",
-      "dbPort": "28015",
-      "dbName": "hydro",
-      "sensorTableName": "sensordata",
-      "dbAuthKey": ""
+      "storageStrategy": "fileStore",
+      "fileStore": {
+        "name": "./data/sensorData.json"
+      },
+      "dbStore": {
+        "host": "localhost",
+        "port": "28015",
+        "dbName": "hydro",
+        "sensorTableName": "sensordata",
+        "authKey": ""
+      }
     },
     "server": {
         "port": 7979
