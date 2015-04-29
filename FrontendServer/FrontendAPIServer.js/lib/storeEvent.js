@@ -5,7 +5,7 @@ var path = require('path');
 
 
 var validate = function (evt) {
-    return (evt != null && typeof evt == 'object') && evt.hasOwnProperty('data');
+    return (evt != null && typeof evt == 'object') && evt.hasOwnProperty('value');
 };
 
 // Database storage
@@ -32,7 +32,7 @@ var connectDb = function (dbConf) {
         timeoutGb: 10 * 60 * 1000,
         silent: false,
         cursor: false,
-        pool: false
+        pool: true
     }; // See https://github.com/neumino/rethinkdbdash
 
     return require('rethinkdbdash')(dbOpts);
@@ -68,7 +68,7 @@ var storeDB = function (sensorEvt, rdb, dbName, tableName, logger) {
     var deferred = Q.defer();
     if (validate(sensorEvt)) {
         rdb.db(dbName).table(tableName).insert(sensorEvt).then(function (res) {
-            logger.debug('Event stored: ' + util.inspect(sensorEvt));
+            //logger.debug('Event stored: ' + util.inspect(sensorEvt));
             deferred.resolve(res);
         }).error(function (err) {
             logger.error(util.inspect(err));
@@ -91,16 +91,13 @@ var storeEventFactory = function (appConf, log4js) {
         storeFunction = function (evt) {
             return storeDB(evt, rdb, appConf.app.dbStore.dbName, appConf.app.dbStore.sensorTableName, logger);
         };
-
-        // Setup file storage
+    // Setup file storage
     } else if (appConf.app.storageStrategy === 'fileStore') {
         logger.info('Using fileStore in file ' + appConf.app.fileStore.name);
         fse.ensureFileSync(path.resolve(appConf.app.fileStore.name));
         storeFunction = function (evt) {
             return storeFile(evt, path.resolve(appConf.app.fileStore.name), logger);
         };
-
-
     }
 
     return function storeEvent(sensorEvt) {
