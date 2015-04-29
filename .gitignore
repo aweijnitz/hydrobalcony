@@ -74,4 +74,4 @@ node_modules
 nohup.out
 *nohup*
 
-./FrontendServer/FrontendAPIServer.js/data
+FrontendServer/FrontendAPIServer.js/data
