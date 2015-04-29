@@ -20,7 +20,7 @@ var setupServer = function setupServer(appConf, log4js) {
 
 
     logger.info('Configuring view engine');
-    app.set('views', path.join(__dirname, 'views'));
+    app.set('views', path.join(path.resolve(process.cwd()), 'views'));
     app.set('view engine', 'hjs');
     app.use(favicon());
 
@@ -33,7 +33,7 @@ var setupServer = function setupServer(appConf, log4js) {
         app.use(log4js.connectLogger(log4js.getLogger("http"), { level: 'auto' }));
 
 
-    var webroot = appConf.app.webroot || path.join(__dirname, 'public');
+    var webroot = path.resolve(appConf.app.webroot) || path.join(path.resolve(process.cwd()), 'public');
     logger.info('Setting webroot to ' + webroot);
     app.use(express.static(webroot));
 

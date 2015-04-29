@@ -1,6 +1,7 @@
 var util = require('util');
 var Q = require('q');
 var fse = require('fs-extra');
+var path = require('path');
 
 
 var validate = function (evt) {
@@ -15,10 +16,10 @@ var validate = function (evt) {
 var rdb = null;
 
 var connectDb = function (dbConf) {
-    var dbHost = dbConfdbHost || "localhost";
-    var dbPort = dbConfdbPort || 28015;
-    var dbName = dbConfdbName;
-    var authKey = dbConfdbAuthKey || '';
+    var dbHost = dbConf.host || "localhost";
+    var dbPort = dbConf.port || 28015;
+    var dbName = dbConf.dbName;
+    var authKey = dbConf.authKey || '';
     var dbOpts = {
         host: dbHost,
         port: dbPort,
@@ -30,7 +31,8 @@ var connectDb = function (dbConf) {
         timeoutError: 2 * 1000,
         timeoutGb: 10 * 60 * 1000,
         silent: false,
-        cursor: false
+        cursor: false,
+        pool: false
     }; // See https://github.com/neumino/rethinkdbdash
 
     return require('rethinkdbdash')(dbOpts);
@@ -41,7 +43,7 @@ var connectDb = function (dbConf) {
  * Store event in file and return promise
  * @param evt
  */
-var storeFile = function (evt, file) {
+var storeFile = function (evt, file, logger) {
     var deferred = Q.defer();
     fse.appendFile(file, JSON.stringify(evt) + '\n', function (err) {
         if (err)
@@ -49,7 +51,7 @@ var storeFile = function (evt, file) {
         else
             deferred.resolve(file);
     });
-    return deferred;
+    return deferred.promise;
 };
 
 /**
@@ -62,6 +64,7 @@ var storeFile = function (evt, file) {
  * @returns {*}
  */
 var storeDB = function (sensorEvt, rdb, dbName, tableName, logger) {
+//    console.log(!!rdb + ' - ' + dbName + ' - ' + tableName);
     var deferred = Q.defer();
     if (validate(sensorEvt)) {
         rdb.db(dbName).table(tableName).insert(sensorEvt).then(function (res) {
@@ -73,7 +76,7 @@ var storeDB = function (sensorEvt, rdb, dbName, tableName, logger) {
         });
     } else
         deferred.reject(new Error('Invalid sensor event'));
-    return deferred;
+    return deferred.promise;
 };
 
 var storeEventFactory = function (appConf, log4js) {
@@ -83,23 +86,21 @@ var storeEventFactory = function (appConf, log4js) {
 
     // Setup db storage
     if (!rdb && appConf.app.storageStrategy === 'dbStore') {
-        logger.info('Using DB Store. Connecting to db at ' + (appConf.app.dbHost || "localhost"));
+        logger.info('Using DB Store. Connecting to db at ' + (appConf.app.dbStore.host || "127.0.0.1"));
         rdb = connectDb(appConf.app.dbStore);
-        storeFunction = (function (rdb, dbName, tableName, logger) {
-            return function (evt) {
-                return storeDB(evt, rdb, dbName, tableName, logger);
-            };
-        })(rdb, appConf.app.dbStore.dbName, appConf.app.dbStore.sensorTableName, logger);
+        storeFunction = function (evt) {
+            return storeDB(evt, rdb, appConf.app.dbStore.dbName, appConf.app.dbStore.sensorTableName, logger);
+        };
 
-    // Setup file storage
+        // Setup file storage
     } else if (appConf.app.storageStrategy === 'fileStore') {
         logger.info('Using fileStore in file ' + appConf.app.fileStore.name);
-        fse.ensureFileSync(appConf.app.fileStore.name);
-        storeFunction = (function (fileName) {
-            return function (evt) {
-                return storeFile(evt, fileName);
-            };
-        })(appConf.app.fileStore.name);
+        fse.ensureFileSync(path.resolve(appConf.app.fileStore.name));
+        storeFunction = function (evt) {
+            return storeFile(evt, path.resolve(appConf.app.fileStore.name), logger);
+        };
+
+
     }
 
     return function storeEvent(sensorEvt) {

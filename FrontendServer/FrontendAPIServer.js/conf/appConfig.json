@@ -2,12 +2,12 @@
     "app": {
       "webroot": "public",
       "dataServer": "hydro.homelinux.net",
-      "storageStrategy": "fileStore",
+      "storageStrategy": "dbStore",
       "fileStore": {
         "name": "./data/sensorData.json"
       },
       "dbStore": {
-        "host": "localhost",
+        "host": "127.0.0.1",
         "port": "28015",
         "dbName": "hydro",
         "sensorTableName": "sensordata",

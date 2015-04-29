@@ -1,6 +1,6 @@
 var util = require('util');
 var EventEmitter = require("events").EventEmitter;
-var ioClient = require('socket.io-client')
+var ioClient = require('socket.io-client');
 
 var singleton = null;
 
@@ -8,6 +8,7 @@ var singleton = null;
 var SensorDataClient = function SensorDataClient(dataServer, log4js) {
     EventEmitter.call(this);
     this.logger = log4js.getLogger('SensorDataClient');
+    this.logger.debug('Creating new sensor data client');
     this.dataServer = dataServer;
 
     if (!!singleton)
@@ -20,14 +21,16 @@ var SensorDataClient = function SensorDataClient(dataServer, log4js) {
 util.inherits(SensorDataClient, EventEmitter);
 
 SensorDataClient.prototype.connect = function connect() {
-    this.io = ioClient('http://' + this.dataServer);
+    this.logger.debug('SensorDataClient connecting to '+'http://' + this.dataServer);
+    this.socket = ioClient('http://' + this.dataServer);
+    var socket = this.socket;
     var that = this;
     socket.on('connect', function () {
         that.logger.info('Connected to ' + that.dataServer);
         that.emit('connect', { endpoint: that.dataServer});
     });
-    socket.on('event', function (evt) {
-        that.logger.debug('Got to ' + util.inspect(evt));
+    socket.on('data', function (evt) {
+        that.logger.debug('Got ' + util.inspect(evt));
         that.emit('data', evt);
 
     });
@@ -43,7 +46,7 @@ var getOrCreate = function getOrCreate(appConf, log4js) {
     if (!!singleton)
         return singleton;
     else {
-        singleton = new SensorDataClient(appConf, log4js);
+        singleton = new SensorDataClient(appConf.app.dataServer, log4js);
         return singleton;
     }
 };

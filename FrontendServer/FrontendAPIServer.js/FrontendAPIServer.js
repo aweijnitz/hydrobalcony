@@ -42,10 +42,11 @@ var endpointConnect = function endpointConnect(sensorClient, storeEvent, io, log
     sensorClient.on('data', function onData (evt) {
         storeEvent(evt).then(function() {
             broadcast(evt, io);
-        }).error(function storeError (err) {
+        }, function storeError (err) {
             logger.error('Failed to store event');
-        }).done();
+        });
     });
+    sensorClient.connect();
 };
 
 logger.info('Prepare server start ');
