@@ -69,7 +69,7 @@ SensorDataClient.prototype.connect = function connect() {
 
     });
     socket.on('disconnect', function () {
-        that.logger.info('Disconnected from ' + dataServer);
+        that.logger.info('Disconnected from ' + that.dataServer);
         that.emit('disconnect', { endpoint: that.dataServer});
     });
 };
