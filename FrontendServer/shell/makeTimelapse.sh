@@ -3,6 +3,8 @@
 cd /home/aw/www/hydro.weekendhack.it
 BASE=/home/aw/www/hydro.weekendhack.it
 
+# Move away night pics, as they are only black frames
+mv $BASE/public_html/hydropics/hydropic-2015-??-??_0[0-4]?[[:digit:][:digit:]].jpg $BASE/public_html/hydropics/night
 
 #VBITRATE=1822500
 VBITRATE=8000000
