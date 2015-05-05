@@ -27,7 +27,7 @@ function palt {printf("alt:%d\n", alt);};
 function hb {printf("hb:%d\n", millis);};
 
 ==Boot function, starting all logging automatically at power on==
-function startup {run hb,10000;run pwl,2000;run pll,60000;run pwt,60000;run ppc,250;run pat,30000;run pap,60000;};
+function startup {run hb,10000;run pwl,30000;run pll,60000;run pwt,60000;run ppc,500;run pat,60000;run pap,60000;};
 
 
 ==Pump control functions==
