@@ -46,6 +46,13 @@ var endpointConnect = function endpointConnect(sensorClient, storeEvent, io, log
             logger.error('Failed to store event');
         });
     });
+    sensorClient.on('pump', function onPump (evt) {
+        storeEvent(evt).then(function() {
+            broadcast(evt, io);
+        }, function storeError (err) {
+            logger.error('Failed to store event');
+        });
+    });
     sensorClient.connect();
 };
 
