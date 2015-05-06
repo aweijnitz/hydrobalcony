@@ -9,22 +9,24 @@ var normalize = function (evt) {
     var timeFormat = 'YYYY-MM-DD HH:mm:ss';
 //    var timeFormat = '';
     var normalized = {};
-    if(!!evt.data) {
+    if (!!evt.data) {
         normalized.name = evt.data[0];
         normalized.value = evt.data[1];
     }
 
-    if(!!evt.raw && !(evt.raw instanceof Array) )
+    if (!!evt.raw && !(evt.raw instanceof Array))
         normalized.raw = evt.raw;
-    else if(!!evt.raw && (evt.raw instanceof Array) )
+    else if (!!evt.raw && (evt.raw instanceof Array))
         normalized.raw = evt.raw[1];
 
-    if(!!evt.time)
+    if (!!evt.time)
         normalized.timestamp = moment(evt.time).format(timeFormat);
+    else if (!!evt.timestamp)
+        normalized.timestamp = moment(evt.timestamp).format(timeFormat);
     else
         normalized.timestamp = moment().format(timeFormat);
 
-    if(!!evt.unit)
+    if (!!evt.unit)
         normalized.unit = evt.unit;
 
     return normalized;
@@ -55,25 +57,27 @@ var SensorDataClient = function SensorDataClient(dataServer, log4js) {
 util.inherits(SensorDataClient, EventEmitter);
 
 SensorDataClient.prototype.connect = function connect() {
-    this.logger.debug('SensorDataClient connecting to '+'http://' + this.dataServer);
+    this.logger.debug('SensorDataClient connecting to ' + 'http://' + this.dataServer);
     this.socket = ioClient('http://' + this.dataServer);
     var socket = this.socket;
     var that = this;
     socket.on('connect', function () {
         that.logger.info('Connected to ' + that.dataServer);
-        that.emit('connect', { endpoint: that.dataServer});
+        that.emit('connect', {msg: 'Connected to hydroponic control server.'});
     });
     socket.on('data', function (evt) {
         //that.logger.debug('Got ' + util.inspect(evt));
         that.emit('data', normalize(evt));
 
     });
+    socket.on('pump', function (evt) {
+        that.emit('pump', normalize(evt));
+    });
     socket.on('disconnect', function () {
         that.logger.info('Disconnected from ' + that.dataServer);
-        that.emit('disconnect', { endpoint: that.dataServer});
+        that.emit('disconnect', {msg: 'Lost contact with hydroponic control server.'});
     });
 };
-
 
 
 var getOrCreate = function getOrCreate(appConf, log4js) {
