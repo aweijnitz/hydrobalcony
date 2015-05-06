@@ -28,7 +28,7 @@ var mountShutdownHooks = function () {
     });
 
     process.on('SIGTERM', function () {
-        logger.WARN('Got SIGTERM.  Shutting down');
+        logger.warn('Got SIGTERM.  Shutting down');
         shutdownHook('SIGTERM');
         exitWithError(0, 'Server shutdown');
     });
