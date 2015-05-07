@@ -20,7 +20,7 @@ router.get('/sensordata/:sensorname', function (req, res) {
     var sensorname = req.params.sensorname;
     var limit = req.query.limit || 100;
     logger.debug('Serving /sensordata', sensorname, limit);
-    res.json(sensorData(sensorname, limit));
+    sensorData(sensorname, limit).then(res.json).done();
 });
 
 module.exports = router;
