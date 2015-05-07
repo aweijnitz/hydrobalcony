@@ -34,21 +34,30 @@ var mountShutdownHooks = function () {
     });
 };
 
-var broadcast = function(msg, io) {
-    io.sockets.emit(msg);
+var broadcast = function(name, msg, io) {
+    io.sockets.emit(name, msg);
+};
+
+var shouldBroadcast = function(evt) {
+    if(!!evt && !!evt.name && evt.name === 'pumpCurrent' && evt.value <= 0)
+	return false;
+    return true;
 };
 
 var endpointConnect = function endpointConnect(sensorClient, storeEvent, io, logger) {
     sensorClient.on('data', function onData (evt) {
-        storeEvent(evt).then(function() {
-            broadcast(evt, io);
+        storeEvent(evt).then(function(wasStored) {
+//	    logger.debug('should broadcast data ', shouldBroadcast(evt), evt);
+	    if(shouldBroadcast(evt))
+		broadcast('data', evt, io);
         }, function storeError (err) {
             logger.error('Failed to store event');
         });
     });
     sensorClient.on('pump', function onPump (evt) {
         storeEvent(evt).then(function() {
-            broadcast(evt, io);
+//	    logger.debug('broadcasting pump ', evt)
+            broadcast('pump', evt, io);
         }, function storeError (err) {
             logger.error('Failed to store event');
         });
@@ -66,10 +75,6 @@ prepServerStart(app).then(function (result) {
     logger.info('Installing shutdown hook');
     mountShutdownHooks();
 
-    logger.info('Connecting to sensor data endpoint');
-    endpointConnect(sensorClient, storeEvent, io);
-
-
     logger.info('Starting server');
     app.set('port', (appConf.server.port || process.env.PORT) || 8080);
 
@@ -80,9 +85,14 @@ prepServerStart(app).then(function (result) {
     logger.info('Adding socket.io server');
     var io = require('socket.io')(server);
     io.on('connection', function (socket) {
+	logger.debug('Client connec!');
         socket.emit('clientConnect', { msg: 'Welcome to the Hydrouino Dream Garden!'});
     });
     app.set('socket.io', io);
+
+    logger.info('Connecting to sensor data endpoint');
+    endpointConnect(sensorClient, storeEvent, io, logger);
+
 
 }, function (err) { // Invoked if promised is rejected
     exitWithError(1, 'Preparation rejected. Failed to prepare server start! ' + util.inspect(result));

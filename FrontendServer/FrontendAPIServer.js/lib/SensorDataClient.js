@@ -66,9 +66,8 @@ SensorDataClient.prototype.connect = function connect() {
         that.emit('connect', {msg: 'Connected to hydroponic control server.'});
     });
     socket.on('data', function (evt) {
-        //that.logger.debug('Got ' + util.inspect(evt));
+//        that.logger.debug('Got ' + util.inspect(evt));
         that.emit('data', normalize(evt));
-
     });
     socket.on('pump', function (evt) {
         that.emit('pump', normalize(evt));

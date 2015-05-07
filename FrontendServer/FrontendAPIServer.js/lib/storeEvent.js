@@ -49,7 +49,7 @@ var storeFile = function (evt, file, logger) {
         if (err)
             deferred.reject(err);
         else
-            deferred.resolve(file);
+            deferred.resolve(true);
     });
     return deferred.promise;
 };
@@ -69,7 +69,7 @@ var storeDB = function (sensorEvt, rdb, dbName, tableName, logger) {
     if (validate(sensorEvt)) {
         rdb.db(dbName).table(tableName).insert(sensorEvt).then(function (res) {
             //logger.debug('Event stored: ' + util.inspect(sensorEvt));
-            deferred.resolve(res);
+            deferred.resolve(true);
         }).error(function (err) {
             logger.error(util.inspect(err));
             deferred.reject(new Error('Could not store sensor event. Err:' + util.inspect(err)));
