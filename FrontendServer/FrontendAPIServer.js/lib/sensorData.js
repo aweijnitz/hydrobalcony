@@ -42,8 +42,8 @@ var connectDb = function (dbConf) {
 var selectInDb = function (name, limit, rdb, dbName, tableName, logger) {
     logger.debug('loading ', name, limit);
     var deferred = Q.defer();
-    rdb.db(dbName).table(tableName).orderBy({index: r.desc('timestamp')})
-        .filter(r.row('name').eq(name))
+    rdb.db(dbName).table(tableName).orderBy({index: rdb.desc('timestamp')})
+        .filter(rdb.row('name').eq(name))
         .limit(limit)
         .pluck('timestamp', 'value')
         .then(function (res) {
