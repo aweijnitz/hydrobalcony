@@ -6,15 +6,19 @@ var log4js = require('log4js');
 log4js.configure('./conf/log4js.json');
 var logger = log4js.getLogger("index");
 
+var sensorData = require('../lib/sensorData')(appConf, log4js);
 
 // Remember, in Express 4, '/' is the root under which this route is mounted, so does not
 // necessarily correspond to the absolute root of the domain.
 //
-router.get('/', function(req, res) {
-  logger.debug('Serving / --> index.hjs');
-  res.render('index', { title: 'Welcome to the empty server' });
+router.get('/', function (req, res) {
+    logger.debug('Serving / --> index.hjs');
+    res.render('index', {title: 'Welcome to the empty server'});
 });
 
-
+router.get('/watertemp', function (req, res) {
+    logger.debug('Serving /watertemp --> json');
+    res.json(sensorData('watertemp', 300));
+});
 
 module.exports = router;
