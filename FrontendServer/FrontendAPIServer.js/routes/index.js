@@ -16,9 +16,11 @@ router.get('/', function (req, res) {
     res.render('index', {title: 'Welcome to the empty server'});
 });
 
-router.get('/watertemp', function (req, res) {
-    logger.debug('Serving /watertemp --> json');
-    res.json(sensorData('watertemp', 300));
+router.get('/sensordata/:sensorname', function (req, res) {
+    var sensorname = req.params.sensorname;
+    var limit = req.query.limit || 100;
+    logger.debug('Serving /sensordata', sensorname, limit);
+    res.json(sensorData(sensorname, limit));
 });
 
 module.exports = router;
