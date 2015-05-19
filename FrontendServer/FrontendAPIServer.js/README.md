@@ -29,6 +29,11 @@ An Express4 server that subscribes to the websockets events emitted from the [tt
 
 ### Useful db queries
 
+#### Ordered list of temperatures for the last week (604800 = 7 * 24 * 60 * 60)
+    r.db('hydro').table('sensordata').orderBy({index: r.desc('timestampraw')}).filter(r.row('timestampraw').during(r.now().add(-604800), r.now()).and(r.row('name').eq('airTemp'))).pluck(['timestampraw','value'])
+
+*Note:* Needs an index on the property to sort by
+
 #### Get max air temperatures grouped by month
     r.db('hydro').table('sensordata').filter(r.row('name').eq('airTemp')).group(r.row('timestampraw').month()).max('value').pluck(['timestampraw','value'])
 
