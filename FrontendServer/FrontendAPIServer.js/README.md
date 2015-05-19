@@ -32,7 +32,7 @@ An Express4 server that subscribes to the websockets events emitted from the [tt
 ## Useful db queries
 
 ### Get max air temperatures grouped by month
-r.db('hydro').table('sensordata').filter(r.row('name').eq('airTemp')).group(r.row('timestampraw').month()).max('value').pluck(['timestampraw','value'])
+```r.db('hydro').table('sensordata').filter(r.row('name').eq('airTemp')).group(r.row('timestampraw').month()).max('value').pluck(['timestampraw','value'])```
 
 ### Get max water temperatures grouped by month
 r.db('hydro').table('sensordata').filter(r.row('name').eq('waterTemp')).group(r.row('timestampraw').month()).max('value').pluck(['timestampraw','value'])
