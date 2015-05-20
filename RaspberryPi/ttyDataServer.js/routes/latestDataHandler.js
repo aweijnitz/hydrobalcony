@@ -10,7 +10,7 @@ var cache = null;
  */
 var handleReq = function (appConf, log4js) {
     var logger = log4js.getLogger("latestdata");
-    cache = require('../lib/dataCache')(appConf, log4js);
+    cache = require('../lib/util/dataCache')(appConf, log4js);
 
     return function latestData(req, res) {
         logger.debug('latestdata route invoked');

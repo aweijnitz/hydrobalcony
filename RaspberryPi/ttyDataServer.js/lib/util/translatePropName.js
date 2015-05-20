@@ -6,10 +6,13 @@
  *
  * Example: 'll:321' -> ['lightLevel', 321] -> Handler: ttyEventHandlers/lightLevelHandler.js
  */
+
+var parseData = require('./ttyMsgParser').parseTTYdata;
+
 var translatePropName = function (ttyData) {
-    var nameVal = ttyData.split(':').map(function (item) {
-        return item.trim();
-    });
+    var nameVal = parseData(ttyData);
+    if (!nameVal) return null;
+
     switch (nameVal[0]) {
         case 'll':
             nameVal[0] = 'lightLevel'

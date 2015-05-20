@@ -83,7 +83,7 @@ prepServerStart(app).then(function (result) {
     tty.on('open', function (msg) {
         logger.info('Serial device open. --> Initializing pump controller ');
         var pumpCtrl = require('./lib/control/PumpController').getPumpController(appConf, log4js, tty);
-        latestDataCache = require('./lib/dataCache')(null, log4js);
+        latestDataCache = require('./lib/util/dataCache')(null, log4js);
 
         pumpCtrl.on('error', function pumpErrorHandler(err) {
             logger.error("Couldn't start pump");

@@ -14,7 +14,6 @@ var handler = function (eventData, emitter, logger) {
     emitter.emit('data', {
         data: processData(eventData.data),
         raw: eventData.data[1],
-        time: eventData.time.format(),
         unit: 'mA'
     });
 };

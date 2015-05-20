@@ -1,8 +1,6 @@
 var util = require("util");
 var EventEmitter = require("events").EventEmitter;
 var moment = require('moment');
-var SerialPort = require("serialport").SerialPort;
-var SerialPortLib = require("serialport");
 var MockSerial = require("./dev/MockSerialPort");
 var mockDataGenerator = require('./dev/mockSerialData');
 
@@ -32,6 +30,9 @@ var SerialPortHandler = function (device, baudrate, bufferSize) {
     if (device === '/dev/tty.MockSerial')
         serialPort = mockSerialPort();
     else {
+        var SerialPort = require("serialport").SerialPort;
+        var SerialPortLib = require("serialport");
+
         serialPort = new SerialPort(device, {
             baudrate: (baudrate || 9600 ),
             buffersize: (bufferSize || 128),
