@@ -20,9 +20,7 @@ describe('heartBeatHandler', function () {
             emit: function (evtName, evtData) {
                 (evtName === 'data').should.be.true;
                 (evtData).should.have.property('data');
-                (evtData).should.have.property('time');
                 (evtData).should.have.property('raw');
-
                 done();
             }
         }, mockLogger);

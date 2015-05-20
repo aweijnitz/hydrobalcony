@@ -19,7 +19,7 @@ var handleReq = function (appConf, log4js) {
         pumpCtrl = require('../lib/control/PumpController').getPumpController();
         var count = req.query.count || 16;
         var format = req.query.format || 'html';
-        var times = pumpCtrl.upcomingTimes(count).map(function(i) { return moment(i).format("dddd, MMMM Do YYYY, hh:mm:ss"); });
+        var times = pumpCtrl.upcomingTimes(count).map(function(i) { return moment(i).format("dddd, MMMM Do YYYY, HH:mm:ss Z"); });
         if('json' === format)
             res.json(times);
         else

@@ -20,7 +20,6 @@ describe('pumpCurrentHandler', function () {
             emit: function (evtName, evtData) {
                 (evtName === 'data').should.be.true;
                 (evtData).should.have.property('data');
-                (evtData).should.have.property('time');
                 done();
             }
         }, mockLogger);

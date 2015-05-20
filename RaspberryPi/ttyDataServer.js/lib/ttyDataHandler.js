@@ -1,34 +1,36 @@
+/**
+ * This module translates the tty messages sent by the ttyDeviceHandler into socket.io events.
+ * Does some minor data filtering to get rid of Bitlash welcome messages and provides optional data logging.
+ */
+
 var os = require('os');
 var fs = require('fs');
 var all = require('promised-io/promise').all;
-
 var path = require('path');
 var util = require('util');
 var moment = require('moment');
+var translatePropName = require('./util/translatePropName');
+var propName = require('./util/ttyMsgParser').getPropName;
+var timeStamp = require('./util/timeStamp');
 
-var translatePropName = require('./translatePropName');
 
 var latestDataCache = null;
 
 /**
- * This creates an event emitter instance that wraps socket.io to catch the data emitted by the handlers
+ * Creates an event emitter instance that wraps socket.io to catch the data emitted by the handlers to add a timestamp
  * @param socketIO
+ * @param timestamp
  * @param logger
  * @returns {{emit: Function}}
  */
-var emitter = function emitter(socketIO, logger) {
-    // Helper
-    var getPropName = function (evtData) {
-        return evtData.data[0];
-    };
+var emitter = function emitter(socketIO, timestamp) {
 
     return {
         emit: function emit(eventName, eventData) {
-            //logger.debug('EMIT', eventName, eventData);
+            eventData.timestamp = timestamp;
             socketIO.emit(eventName, eventData);
             if ('data' === eventName) {
-                // pickup and cache latest processed data
-                latestDataCache.put(getPropName(eventData), eventData);
+                latestDataCache.put(propName(eventData), eventData);
             }
         }
     };
@@ -36,6 +38,7 @@ var emitter = function emitter(socketIO, logger) {
 
 /**
  * Look up and load event handler for ttyData and dispatch the event to the handler.
+ * Also attaches a timestamp to each event.
  * The lookup is name based. See file translatePropName.js
  *
  * @param ttyData - Data event received over tty
@@ -45,15 +48,17 @@ var emitter = function emitter(socketIO, logger) {
 var processEvent = function processEvent(ttyData, eventEmitter, logger) {
 
     var dataName = translatePropName(ttyData.data)[0];
-    var handlerName = dataName + 'Handler';
+    var handlerName = dataName + 'Handler.js';
 
     try {
-	var result = require('./ttyEventHandlers/' + handlerName)({
-            data: translatePropName(ttyData.data),
-            time: ttyData.time
-	}, eventEmitter, logger);
-    } catch(e) {
-	logger.error('No handler found for '+dataName);
+        var handlerPath = path.resolve(__dirname + '/ttyEventHandlers/' + handlerName);
+        var eventHandler = require(handlerPath);
+
+        var evt = {};
+        evt.data = translatePropName(ttyData.data);
+        eventHandler(evt, emitter(eventEmitter, timeStamp(ttyData.time)), logger);
+    } catch (e) {
+        logger.error(e);
     }
 
 };
@@ -81,7 +86,7 @@ var store = function storeData(ttyData, dataFile) {
 var dataHandlerFactory = function (deviceHandler, dataLogFileName, socketIO, log4js) {
     var logger = log4js.getLogger("dataHandler");
     var dataFile = dataLogFileName;
-    latestDataCache = require('../lib/dataCache')(null, log4js);
+    latestDataCache = require('./util/dataCache')(null, log4js);
 
     return function dataHandler(ttyData) {
         if (ttyData && ttyData.data) {
@@ -92,7 +97,7 @@ var dataHandlerFactory = function (deviceHandler, dataLogFileName, socketIO, log
             // Log to file and forward event to event handlers
             if (!!dataFile)
                 store(ttyData, dataFile);
-            processEvent(ttyData, emitter(socketIO, logger), logger);
+            processEvent(ttyData, socketIO, logger);
         } else
             logger.debug('SKIPPED MESSAGE: ' + util.inspect(ttyData));
     };

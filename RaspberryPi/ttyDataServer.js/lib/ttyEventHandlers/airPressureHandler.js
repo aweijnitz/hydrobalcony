@@ -7,7 +7,6 @@
 var handler = function (eventData, emitter, logger) {
     emitter.emit('data', {
         data: eventData.data,
-        time: eventData.time.format(),
         unit: 'mBar'
     });
 };

@@ -4,8 +4,17 @@ var util = require('util');
 var ttyDataHandler = require('../lib/ttyDataHandler.js');
 var moment = require('moment');
 
+var log = function (msg) {
+    console.log('========= LOG: '+msg);
+};
+
 var mockLogger = {
     getLogger: function () {
+        return {
+            debug: function(msg) { log(msg);},
+            info: function(msg) {log(msg);},
+            error: function(msg) {log(msg);}
+        }
     }
 };
 
@@ -27,7 +36,7 @@ describe('ttyDataHandler', function () {
             emit: function (evtName, evtData) {
                 (evtName === 'data').should.be.true;
                 (evtData).should.have.property('data');
-                (evtData).should.have.property('time');
+                (evtData).should.have.property('timestamp');
 
                 done();
             }

@@ -1,3 +1,7 @@
+/**
+ * This module fetches sensor data from the database.
+ */
+
 var util = require('util');
 var Q = require('q');
 
