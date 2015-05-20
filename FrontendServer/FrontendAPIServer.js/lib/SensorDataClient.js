@@ -6,8 +6,6 @@ var moment = require('moment');
 var singleton = null;
 
 var normalize = function (evt) {
-    var timeFormat = 'YYYY-MM-DD HH:mm:ss';
-//    var timeFormat = '';
     var normalized = {};
     if (!!evt.data) {
         normalized.name = evt.data[0];
@@ -19,12 +17,12 @@ var normalize = function (evt) {
     else if (!!evt.raw && (evt.raw instanceof Array))
         normalized.raw = evt.raw[1];
 
-    if (!!evt.time)
-        normalized.timestamp = moment(evt.time).format(timeFormat);
+    if (!!evt.timestamp)
+        normalized.timestamp = new Date(evt.timestamp);
     else if (!!evt.timestamp)
-        normalized.timestamp = moment(evt.timestamp).format(timeFormat);
+        normalized.timestamp = new Date(evt.timestamp);
     else
-        normalized.timestamp = moment().format(timeFormat);
+        normalized.timestamp = new Date();
 
     if (!!evt.unit)
         normalized.unit = evt.unit;

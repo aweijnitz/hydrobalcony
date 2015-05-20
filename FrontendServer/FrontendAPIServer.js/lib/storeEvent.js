@@ -68,7 +68,7 @@ var storeDB = function (sensorEvt, rdb, dbName, tableName, logger) {
     var deferred = Q.defer();
     if (validate(sensorEvt)) {
         rdb.db(dbName).table(tableName).insert(sensorEvt).then(function (res) {
-            //logger.debug('Event stored: ' + util.inspect(sensorEvt));
+            logger.debug('Event stored: ' + util.inspect(sensorEvt));
             deferred.resolve(true);
         }).error(function (err) {
             logger.error(util.inspect(err));

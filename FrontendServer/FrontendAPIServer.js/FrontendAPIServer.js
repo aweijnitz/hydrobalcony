@@ -34,31 +34,31 @@ var mountShutdownHooks = function () {
     });
 };
 
-var broadcast = function(name, msg, io) {
+var broadcast = function (name, msg, io) {
     io.sockets.emit(name, msg);
 };
 
-var shouldBroadcast = function(evt) {
-    if(!!evt && !!evt.name && evt.name === 'pumpCurrent' && evt.value <= 0)
-	return false;
+var shouldBroadcast = function (evt) {
+    if (!!evt && !!evt.name && evt.name === 'pumpCurrent' && evt.value <= 0)
+        return false;
     return true;
 };
 
 var endpointConnect = function endpointConnect(sensorClient, storeEvent, io, logger) {
-    sensorClient.on('data', function onData (evt) {
-        storeEvent(evt).then(function(wasStored) {
+    sensorClient.on('data', function onData(evt) {
+        storeEvent(evt).then(function (wasStored) {
 //	    logger.debug('should broadcast data ', shouldBroadcast(evt), evt);
-	    if(shouldBroadcast(evt))
-		broadcast('data', evt, io);
-        }, function storeError (err) {
+            if (shouldBroadcast(evt))
+                broadcast('data', evt, io);
+        }, function storeError(err) {
             logger.error('Failed to store event');
         });
     });
-    sensorClient.on('pump', function onPump (evt) {
-        storeEvent(evt).then(function() {
+    sensorClient.on('pump', function onPump(evt) {
+        storeEvent(evt).then(function () {
 //	    logger.debug('broadcasting pump ', evt)
             broadcast('pump', evt, io);
-        }, function storeError (err) {
+        }, function storeError(err) {
             logger.error('Failed to store event');
         });
     });
@@ -85,8 +85,8 @@ prepServerStart(app).then(function (result) {
     logger.info('Adding socket.io server');
     var io = require('socket.io')(server);
     io.on('connection', function (socket) {
-	logger.debug('Client connec!');
-        socket.emit('clientConnect', { msg: 'Welcome to the Hydrouino Dream Garden!'});
+        logger.debug('Client connect!');
+        socket.emit('clientConnect', {msg: 'Welcome to the Hydrouino Dream Garden!'});
     });
     app.set('socket.io', io);
 
