@@ -72,7 +72,32 @@ var sensorDataFactory = function (appConf, log4js) {
 
 
     return function sensorData(name, limit) {
-        return selectFunction(name, limit);
+        if (name instanceof Array) {
+            // Query DB once for each sensor name in the name[] array
+            // then combine the results into one multi-value array.
+            // Return promise which resolves to the combined array.
+            var deferred = Q.defer();
+            var promises = [];
+            name.forEach(function (sensorName) {
+                promises.push(selectFunction(sensorName, limit));
+            });
+            Q.all(promises).then(function combine(res) {
+                //logger.debug('COMBINE', res);
+                var combined = res[0].map(function (sensorValueObj, index) {
+                    var obj = {
+                        timestamp: sensorValueObj.timestamp
+                    };
+                    name.forEach(function addValues(nme, i) {
+                        obj[nme] = res[i][index].value;
+                    });
+                    return obj;
+                });
+                deferred.resolve(combined);
+            });
+            return deferred.promise;
+        }
+        else
+            return selectFunction(name, limit);
     };
 };
 

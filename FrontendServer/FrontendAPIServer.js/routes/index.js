@@ -1,5 +1,6 @@
 var appConf = require('../conf/appConfig.json');
 var express = require('express');
+
 var router = express.Router();
 
 var log4js = require('log4js');
@@ -21,6 +22,13 @@ router.get('/sensordata/:sensorname', function (req, res) {
     var limit = parseInt(req.query.limit) || 100;
     logger.debug('Serving /sensordata', sensorname, limit);
     sensorData(sensorname, limit).then(function(result) { res.json(result); });
+});
+
+router.get('/temperatures', function (req, res) {
+    var sensornames = ['waterTemp', 'airTemp'];
+    var limit = parseInt(req.query.limit) || 100;
+    logger.debug('Serving /temperatures', sensornames, limit);
+    sensorData(sensornames, limit).then(function(result) { res.json(result); });
 });
 
 module.exports = router;
