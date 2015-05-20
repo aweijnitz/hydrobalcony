@@ -22,7 +22,7 @@ var migrateDb = function migrateDb(r, conn, dbName, tableName) {
             return entry.merge({
                 // This is a way to get around ISO8601 date parsing
                 // We're basically replacing a ' ' with 'T'
-                'timestampraw': r.ISO8601(
+                'timestamp': r.ISO8601(
                     entry('timestamp').split()(0).add('T').add(entry('timestamp').split()(1)),
                     {
                         defaultTimezone: '+2'
