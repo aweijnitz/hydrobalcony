@@ -26,7 +26,8 @@ var migrateDb = function migrateDb(r, conn, dbName, tableName) {
                     entry('timestamp').split()(0).add('T').add(entry('timestamp').split()(1)),
                     {
                         defaultTimezone: '+2'
-                    })
+                    }),
+                'migrated': true
             });
         })
         .run(conn, {useOutdated: true, arrayLimit: 1000000}, function (err, res) {
