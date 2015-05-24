@@ -6,7 +6,7 @@
  * 
  * This script does the following:
  * - If no new data has been written since last check
- *   1. Remove the file ./webroot/ok.html (put an external uptime monitor on 'ok.html' and get alarms if it 404:s
+ *   1. Remove the file ./webroot/ok.html (put an external uptime monitor on 'ok.html' and get alarms if it 404:s)
  *   2. Send SMS to the phone number configured in sms.json
  */
 
@@ -115,10 +115,8 @@ var sendSMS = function(msg, conf, cb) {
 
 
 // MAIN SCRIPT
-// 1 - Read last timestamp from disk
-// 2 - Compare with DB
+// 2 - Read latest sensor value from DB
 // 3.0 - Alarm if needed
-// 3.1 - Or updatetimestamp file 
 
 okHtml();
 
