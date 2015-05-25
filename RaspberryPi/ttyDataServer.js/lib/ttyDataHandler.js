@@ -12,7 +12,7 @@ var moment = require('moment');
 var translatePropName = require('./util/translatePropName');
 var propName = require('./util/ttyMsgParser').getPropName;
 var timeStamp = require('./util/timeStamp');
-
+var vetoPump = null;
 
 var latestDataCache = null;
 
@@ -31,6 +31,9 @@ var emitter = function emitter(socketIO, timestamp) {
             socketIO.emit(eventName, eventData);
             if ('data' === eventName) {
                 latestDataCache.put(propName(eventData), eventData);
+            } else if('waterLevelCritical' == eventName) { // TODO: Move to more logical place!
+                vetoPump(JSON.stringify(eventData));
+                socketIO.emit('data', eventData);
             }
         }
     };
@@ -83,10 +86,11 @@ var store = function storeData(ttyData, dataFile) {
  * @param log4js
  * @returns {Function}
  */
-var dataHandlerFactory = function (deviceHandler, dataLogFileName, socketIO, log4js) {
+var dataHandlerFactory = function (deviceHandler, vetoFile, dataLogFileName, socketIO, log4js) {
     var logger = log4js.getLogger("dataHandler");
     var dataFile = dataLogFileName;
     latestDataCache = require('./util/dataCache')(null, log4js);
+    vetoPump = require('./util/vetoPump')(vetoFile, log4js);
 
     return function dataHandler(ttyData) {
         if (ttyData && ttyData.data) {

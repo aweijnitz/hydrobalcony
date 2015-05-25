@@ -3,16 +3,17 @@
     "webroot": "public",
     "dataFile": "dataDir/ttyData.log",
     "serialPort": {
-      "device": "/dev/ttyUSB0",
+      "device": "/dev/tty.MockSerial",
       "baudrate": 57600,
       "buffer": 128
     },
-    "pumpIntervalSecs": 30,
-    "pumpTimeoutSecs": 45,
-    "pumpScheduleFile": "./conf/pumpSchedule.json"
+    "pumpIntervalSecs": 20,
+    "pumpTimeoutSecs": 40,
+    "pumpScheduleFile": "./conf/pumpSchedule.json",
+    "vetoFile": "./dataDir/PUMP_VETO"
   },
   "server": {
-    "host": "192.168.178.117",
+    "host": "localhost",
     "port": 7878
   }
 }

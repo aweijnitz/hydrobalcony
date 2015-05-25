@@ -1,9 +1,8 @@
-
 var EMPTY_LEVEL_RAW = 262; // Note: Fluctuating readings. Have seen 266 as well on empty
+var CRITICAL_LEVEL = 3.5;
 
-
-var processData = function(eventData) {
-    return [eventData[0], ((EMPTY_LEVEL_RAW - eventData[1])/10.0).toFixed(1)];
+var processData = function (eventData) {
+    return [eventData[0], ((EMPTY_LEVEL_RAW - eventData[1]) / 10.0).toFixed(1)];
 };
 
 /**
@@ -12,11 +11,18 @@ var processData = function(eventData) {
  * logger - log4js logger instance for logging
  */
 var handler = function (eventData, emitter, logger) {
+    var processed = processData(eventData.data);
+    var payload = {
+        data: processed,
+        unit: 'cm',
+        raw: eventData.data[1]
+    };
 
-    emitter.emit('data', {
-        data: processData(eventData.data),
-        unit: 'cm'
-    });
+    if(processed[1] <= CRITICAL_LEVEL) {
+        logger.warn('WATER LEVEL CRITICAL: ' + processed[1]);
+        emitter.emit('waterLevelCritical', payload);
+    } else
+        emitter.emit('data', payload);
 
 };
 

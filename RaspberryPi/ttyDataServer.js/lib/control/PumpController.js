@@ -5,10 +5,10 @@ var path = require('path');
 var util = require('util');
 var EventEmitter = require("events").EventEmitter;
 
-
+var vetoFile = path.resolve(path.join(__dirname, '../../dataDir', 'PUMP_VETO')); // Default
 
 // Helper
-var isCallback = function(callback) {
+var isCallback = function (callback) {
     return (!!callback && typeof callback === 'function');
 };
 
@@ -18,19 +18,40 @@ var writeAndDrain = function writeAndDrain(tty, data, callback) {
     });
 };
 
+var exists = function (file) {
+    try {
+        fs.statSync(file);
+        return true;
+    } catch (err) {
+        return false;
+    }
+};
+
+
+var isPumpVeto = function () {
+    return exists(vetoFile);
+};
+
 var pump = function pump(action, tty, callback, logger) {
+
     if (!!tty) {
         logger.debug('Writing to serial');
-        if (action)
-            writeAndDrain(tty, new Buffer('rp\n', 'ascii'), function (err) {
-                logger.debug('Sent command: rp');
-                if(isCallback(callback))
-                    callback(err);
-            });
+        if (action) { // Run pump
+            if (isPumpVeto()) {
+                logger.warn('pump start, but veto file present. Pump not started!');
+                if (isCallback(callback))
+                    callback({msg: 'Pump run vetoed. Pump not started', veto: true, err: { msg: 'Veto file ' + vetoFile} });
+            } else
+                writeAndDrain(tty, new Buffer('rp\n', 'ascii'), function (err) {
+                    logger.debug('Sent command: rp');
+                    if (isCallback(callback))
+                        callback(err);
+                });
+        }
         else
             writeAndDrain(tty, new Buffer('sp\n', 'ascii'), function (err) {
                 logger.debug('Sent command: sp');
-                if(isCallback(callback))
+                if (isCallback(callback))
                     callback(err);
             });
     } else
@@ -52,7 +73,7 @@ var PumpController = function PumpController(schedule, tty, interval, timeout, l
     later.date.localTime();
     this.logger.info('PumpController initialized');
     if (!!singleton)
-        this.logger.warn('Multiple PumpController instances created. There can only be one!');
+        this.logger.warn('Multiple PumpController instances created. There can only be one! Skipping this instance.');
     else
         singleton = this;
 };
@@ -70,16 +91,18 @@ PumpController.prototype.start = function (callback) {
     this.logger.info('Starting pump');
     var that = this;
     var tty = this.tty;
-    pump(true, tty, function(err) {
-        if(!!err) {
-            that.logger.error('Could not start pump! err: '+util.inspect(err));
-            that.emit('error', { msg: 'Start pump failed', err: err });
-            if(isCallback(callback)) callback(err);
+    pump(true, tty, function (err) {
+        if (!!err) {
+            that.logger.error('Could not start pump! err: ' + util.inspect(err));
+            var status = {msg: 'Start pump failed', err: err};
+            that.emit('error', status);
+            if (isCallback(callback)) callback(status);
         } else {
             that.running = true;
-            that.emit('start', { msg: 'Pump started', state: 'on' });
+            var status = {msg: 'Pump started', state: 'on'};
+            that.emit('start', status);
             that.logger.debug('Pump started.');
-            if(isCallback(callback)) callback();
+            if (isCallback(callback)) callback(status);
         }
     }, this.logger);
 };
@@ -87,23 +110,25 @@ PumpController.prototype.start = function (callback) {
 PumpController.prototype.stop = function (callback) {
     this.logger.info('Stopping pump');
     var that = this;
-    pump(false, this.tty, function(err) {
-        if(!!err) {
-            that.logger.error('Could not stop pump! err: '+util.inspect(err));
-            that.emit('error', { msg: 'Stop pump failed', err: err });
-            if(isCallback(callback)) callback(err);
+    pump(false, this.tty, function (err) {
+        if (!!err) {
+            that.logger.error('Could not stop pump! err: ' + util.inspect(err));
+            var status = {msg: 'Stop pump failed', err: err};
+            that.emit('error', status);
+            if (isCallback(callback)) callback(status);
         } else {
             that.running = false;
-            that.emit('stop', { msg: 'Pump stopped', state: 'off' });
+            var status = {msg: 'Pump stopped', state: 'off'};
+            that.emit('stop', status);
             that.logger.debug('Pump stopped.');
-            if(isCallback(callback)) callback();
+            if (isCallback(callback)) callback(status);
         }
     }, this.logger);
 };
 
 PumpController.prototype.trigger = function (callback) {
     this.logger.info('Triggering pump');
-    this.emit('trigger', { msg: 'Triggering pump.', duration: this.pumpInterval, time: new Date() });
+    this.emit('trigger', {msg: 'Triggering pump.', duration: this.pumpInterval, time: new Date()});
     var that = this;
     this.start(function triggerJob(err) {
         setTimeout(function stopJob() {
@@ -119,11 +144,11 @@ PumpController.prototype.run = function () {
     var that = this;
     this.logger.debug('Stopping pump');
     this.stop(function startSchedule(err) {
-        if(!!err) {
+        if (!!err) {
             that.logger.error('Could not start pump', util.inspect(err));
         } else {
             that.logger.info('Starting pump controller schedule');
-            that.logger.info('Next pump run at: '+that.upcomingTimes(1));
+            that.logger.info('Next pump run at: ' + that.upcomingTimes(1));
             that.scheduleId = later.setInterval(function triggerJob() {
                 that.trigger();
             }, that.schedule);
@@ -142,16 +167,17 @@ var getOrCreateController = function getOrCreateController(appConf, log4js, tty)
     if (!!singleton)
         return singleton;
     else {
-        var pumpRunInterval = (appConf.app.pumpIntervalSecs * 1000) || 20*1000;
-        var timeout = appConf.app.pumpTimeoutSecs * 1000 || 40*1000;
+        var pumpRunInterval = (appConf.app.pumpIntervalSecs * 1000) || 20 * 1000;
+        var timeout = appConf.app.pumpTimeoutSecs * 1000 || 40 * 1000;
         var scheduleFile = path.resolve(appConf.app.pumpScheduleFile);
+        vetoFile = path.resolve(appConf.app.vetoFile);
         var scheduleData = JSON.parse(fs.readFileSync(scheduleFile).toString());
         singleton = new PumpController(scheduleData, tty, pumpRunInterval, pumpRunInterval, log4js);
 
         // Enable hot reload for schedule conf file
-        fs.watch(scheduleFile,{ persistent: true, recursive: false },function(event, filename) {
+        fs.watch(scheduleFile, {persistent: true, recursive: false}, function (event, filename) {
             var logger = log4js.getLogger('pumpFileWatch');
-            logger.info('Reloading schedule config file from '+filename);
+            logger.info('Reloading schedule config file from ' + filename);
             var scheduleData = JSON.parse(fs.readFileSync(scheduleFile).toString());
             singleton = null;
             singleton = new PumpController(scheduleData, tty, pumpRunInterval, pumpRunInterval, log4js);

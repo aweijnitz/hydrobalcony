@@ -86,7 +86,7 @@ prepServerStart(app).then(function (result) {
         latestDataCache = require('./lib/util/dataCache')(null, log4js);
 
         pumpCtrl.on('error', function pumpErrorHandler(err) {
-            logger.error("Couldn't start pump");
+            logger.error("Error in Pump Controller: "+util.inspect(err));
         });
         pumpCtrl.on('start', function onStart(evtData) {
             latestDataCache.put('pump', evtData.state);
@@ -113,7 +113,7 @@ prepServerStart(app).then(function (result) {
     fse.ensureFileSync(appConf.app.dataFile);
 
     logger.info('Initializing serial data handler');
-    var handler = ttyDataHandler(tty, appConf.app.dataFile, io, log4js);
+    var handler = ttyDataHandler(tty, path.resolve(appConf.app.vetoFile), path.resolve(appConf.app.dataFile), io, log4js);
     tty.on('data', handler);
     tty.on('close', function (err) {
         logger.warn('Serial port closed!');

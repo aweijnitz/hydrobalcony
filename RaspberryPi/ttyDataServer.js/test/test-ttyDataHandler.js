@@ -26,13 +26,13 @@ var mockSocketIO = {
 describe('ttyDataHandler', function () {
 
     it('Factory function should return a function', function (done) {
-        var f = ttyDataHandler({}, 'logFile', mockSocketIO, mockLogger);
+        var f = ttyDataHandler({}, 'vetoFile','logFile', mockSocketIO, mockLogger);
         (typeof f === 'function').should.be.true;
         done();
     });
 
     it('Handler function should emit events', function (done) {
-        var handler = ttyDataHandler({}, null, {
+        var handler = ttyDataHandler({}, 'vetoFile', null, {
             emit: function (evtName, evtData) {
                 (evtName === 'data').should.be.true;
                 (evtData).should.have.property('data');
