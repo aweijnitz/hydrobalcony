@@ -53,10 +53,7 @@ var makeValuesFloat = function makeValuesFloat(r, conn, writeConn, dbName, table
         .run(conn, {useOutdated: true, arrayLimit: 3000000}).then(function (cursor) {
             var buf = [];
             var flushLimit = 5000;
-            if(written >= 1500000) {
-                log("Something is wrong! More data written than in DB.");
-                process.exit(-1);
-            }
+
             var flushBuffer = function flushBuffer(isFinal) {
                 r.db(dbName).table('sensordata0').insert(buf
                     , {conflict: "replace"}
