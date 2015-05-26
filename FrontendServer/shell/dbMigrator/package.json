@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "q": "^1.4.1",
-    "rethinkdb": "^2.0.0",
-    "rethinkdbdash": "^2.0.10"
+    "rethinkdb": "^2.0.0"
   }
 }

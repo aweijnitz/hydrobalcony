@@ -2,6 +2,7 @@ var util = require('util');
 var Q = require('q');
 var path = require('path');
 var conf = require('./conf/db.json');
+var r = require('rethinkdb');
 
 var log = function (msg) {
     console.log(msg);
@@ -12,7 +13,7 @@ var log = function (msg) {
  * 1 - Select all entries in DB.
  * 2 - For each entry
  *  2.1 - Read existing property 'timestamp' (format: '2015-05-06 15:04:48')
- *  2.2 - Convert to rethinkDB format and store in new property 'timestampraw'
+ *  2.2 - Convert to rethinkDB format and store back in property 'timestamp'
  *  2.3 - Replace entry
  */
 
@@ -41,7 +42,7 @@ var migrateDb = function migrateDb(r, conn, dbName, tableName) {
 };
 
 
-var r = require('rethinkdb');
+
 r.connect(conf).then(function (conn) {
     migrateDb(r, conn, conf.db, conf.tableName);
 });
