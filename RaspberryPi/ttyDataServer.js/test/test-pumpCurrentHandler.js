@@ -14,7 +14,7 @@ describe('pumpCurrentHandler', function () {
     it('Should emit processed events', function (done) {
 
         handler({
-            data: ['pumpCurrent', '-38'],
+            data: ['pumpCurrent', '38'],
             time: moment()
         }, {
             emit: function (evtName, evtData) {
@@ -30,13 +30,13 @@ describe('pumpCurrentHandler', function () {
     it('Should forward current measurement untouched as "raw"', function (done) {
 
         handler({
-            data: ['pumpCurrent', '-38'],
+            data: ['pumpCurrent', '38'],
             time: moment()
         }, {
             emit: function (evtName, evtData) {
                 (evtName === 'data').should.be.true;
                 (evtData).should.have.property('raw');
-                (parseInt(evtData.raw) == -38).should.be.true;
+                (parseInt(evtData.raw)).should.equal(38);
                 done();
             }
         }, mockLogger);
@@ -47,18 +47,16 @@ describe('pumpCurrentHandler', function () {
 
     it('Should return 0 for values <= 0', function (done) {
 
-        handler({
+        var result = handler({
             data: ['pumpCurrent', '-38'],
             time: moment()
         }, {
             emit: function (evtName, evtData) {
-                (evtName === 'data').should.be.true;
-                (evtData).should.have.property('data');
-                (parseInt(evtData.data[1]) == 0).should.be.true;
-                done();
             }
         }, mockLogger);
 
+        result[1].should.equal(0);
+        done();
     });
 
 
@@ -72,7 +70,7 @@ describe('pumpCurrentHandler', function () {
             emit: function (evtName, evtData) {
                 (evtName === 'data').should.be.true;
                 (evtData).should.have.property('data');
-                (parseInt(evtData.data[1]) == 38).should.be.true;
+                (parseInt(evtData.data[1])).should.equal(38);
                 done();
             }
         }, mockLogger);

@@ -1,6 +1,4 @@
-
-
-var processData = function(eventData) {
+var processData = function (eventData) {
     return [eventData[0], (eventData[1] > 0 ? eventData[1] : 0)];
 };
 
@@ -11,11 +9,15 @@ var processData = function(eventData) {
  * logger - log4js logger instance for logging
  */
 var handler = function (eventData, emitter, logger) {
-    emitter.emit('data', {
-        data: processData(eventData.data),
-        raw: eventData.data[1],
-        unit: 'mA'
-    });
+    var data = processData(eventData.data);
+    if (data[1] > 0)
+        emitter.emit('data', {
+            data: data,
+            raw: eventData.data[1],
+            unit: 'mA'
+        });
+
+    return data;
 };
 
 exports = module.exports = handler;
