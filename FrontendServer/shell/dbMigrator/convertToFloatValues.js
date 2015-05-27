@@ -9,8 +9,8 @@ var log = function (msg) {
 };
 
 var statsTableName = 'stats';
-var statsIndexNames = ['timestamp', 'name'];
-
+var tempTable = 'sensordata0';
+var indexNames = ['timestamp', 'name'];
 
 var ensureTable = function ensureTable(r, conn, dbName, tableName, close) {
     r.db(dbName).tableCreate(tableName).run(conn, {useOutdated: true, arrayLimit: 1000000}, function (err, res) {
@@ -29,7 +29,7 @@ var ensureIndex = function ensureIndex(r, conn, dbName, tableName, indexName, cl
     r.db(dbName).table(tableName).indexCreate(indexName)
         .run(conn, {useOutdated: true, arrayLimit: 1000000}, function (err, res) {
             if (err && !/already exists/.test(err.msg)) throw err;
-            log(err);
+            //  log(err);
             if (close)
                 conn.close(function (err) {
                     if (err) throw err;
@@ -55,7 +55,7 @@ var makeValuesFloat = function makeValuesFloat(r, conn, writeConn, dbName, table
             var flushLimit = 5000;
 
             var flushBuffer = function flushBuffer(isFinal) {
-                r.db(dbName).table('sensordata0').insert(buf
+                r.db(dbName).table(tempTable).insert(buf
                     , {conflict: "replace"}
                 ).run(writeConn).then(function (curs) {
                         written += buf.length;
@@ -108,8 +108,8 @@ var makeValuesFloat = function makeValuesFloat(r, conn, writeConn, dbName, table
 
 r.connect(conf).then(function (readConn) {
     r.connect(conf).then(function (writeConn) {
-        //ensureTable(r, readConn, conf.db, statsTableName, false);
-        //statsIndexNames.forEach(function(indexName) {  ensureIndex(r, readConn, conf.db, statsTableName, indexName, false); });
-        makeValuesFloat(r, readConn, writeConn, conf.db, conf.tableName, false);
+        //ensureTable(r, readConn, conf.db, tempTable, true);
+        //indexNames.forEach(function(indexName) {  ensureIndex(r, readConn, conf.db, tempTable, indexName, false); });
+        //makeValuesFloat(r, readConn, writeConn, conf.db, conf.tableName, false);
     })
 });
