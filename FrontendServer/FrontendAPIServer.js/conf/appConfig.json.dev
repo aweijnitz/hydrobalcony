@@ -1,0 +1,20 @@
+{
+    "app": {
+      "webroot": "public",
+      "dataServer": "127.0.0.1:7878",
+      "storageStrategy": "dbStore",
+      "fileStore": {
+        "name": "./data/sensorData.json"
+      },
+      "dbStore": {
+        "host": "127.0.0.1",
+        "port": "28015",
+        "dbName": "hydro",
+        "sensorTableName": "sensordata",
+        "authKey": ""
+      }
+    },
+    "server": {
+        "port": 7979
+    }
+}

@@ -2,14 +2,18 @@ var util = require('util');
 var EventEmitter = require("events").EventEmitter;
 var ioClient = require('socket.io-client');
 var moment = require('moment');
+var ensureFloat = require('./util/eventProcessing').ensureFloat;
 
 var singleton = null;
 
 var normalize = function (evt) {
+    var floatValuedSensors = ['lightLevel','waterLevel','waterTemp','airTemp','airPressure'];
+
     var normalized = {};
     if (!!evt.data) {
-        normalized.name = evt.data[0];
-        normalized.value = evt.data[1];
+        var data = ensureFloat(evt.data, floatValuedSensors);
+        normalized.name = data[0];
+        normalized.value = data[1];
     }
 
     if (!!evt.raw && !(evt.raw instanceof Array))
