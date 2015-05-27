@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Hurouino Dream Garden Timelapse</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/readable/bootstrap.min.css" rel="stylesheet">
+
+    <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+    <script src="//vjs.zencdn.net/4.12/video.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Timelapse video</h1>
+            <p>Every ten minutes, a picture of the growing rig is taken and at the end of the hour, a timelapse of the
+            history so far is updated.</p>
+            <p>Sit back and enjoy the journey, or use the list below to quickly re-live the highs and lows of
+            the Hydrouino Dream Garden adventure.</p>
+        </div>
+    </div>
+    <div class="row" style="padding-top: 1.5rem">
+        <div class="col-sm-12">
+            <video id="timelapse_player" class="video-js vjs-default-skin"
+                   controls preload="auto" width="720" height="480"
+                   poster="img/video_poster.png"
+                   data-setup='{"autoplay": false}'>
+                <source src="http://hydro.weekendhack.it/timelapse.mp4" type='video/mp4'/>
+                <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web
+                    browser that
+                    <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+            </video>
+        </div>
+    </div>
+
+    <div class="row" style="padding-top: 1.5rem; padding-bottom: 5rem">
+        <div class="col-sm-7">
+            <table class="table">
+                <thead><h2>Events of note</h2></thead>
+                <tbody>
+                <tr>
+                    <td>Water pipe falls out, pumping water on the balcony!</td>
+                    <td>
+                        <button id="leakage">Play</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Changed to new batch of nutrient water. Nutrient solution too strong. Tomato plant nearly dies.</td>
+                    <td>
+                        <button id="malnutrition">Play</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="js/timelapseCtrl.js"></script>
+</body>
+</html>
