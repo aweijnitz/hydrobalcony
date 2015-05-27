@@ -3,7 +3,7 @@ var MAX_SEEN_RAW = 566.0;
 
 
 var processData = function(eventData) {
-    return [eventData[0], (100.0*eventData[1]/MAX_SEEN_RAW).toFixed(1)];
+    return [eventData[0], parseFloat((100.0*eventData[1]/MAX_SEEN_RAW).toFixed(1))];
 };
 
 /**
@@ -14,7 +14,8 @@ var processData = function(eventData) {
 var handler = function (eventData, emitter, logger) {
     emitter.emit('data', {
         data: processData(eventData.data),
-        unit: '%'
+        unit: '%',
+        raw: eventData.data[1]
     });
 };
 

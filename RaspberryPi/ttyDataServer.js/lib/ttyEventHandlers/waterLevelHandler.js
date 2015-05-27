@@ -2,7 +2,7 @@ var EMPTY_LEVEL_RAW = 262; // Note: Fluctuating readings. Have seen 266 as well 
 var CRITICAL_LEVEL = 3.5;
 
 var processData = function (eventData) {
-    return [eventData[0], ((EMPTY_LEVEL_RAW - eventData[1]) / 10.0).toFixed(1)];
+    return [eventData[0], parseFloat(((EMPTY_LEVEL_RAW - eventData[1])) / 10.0.toFixed(1))];
 };
 
 /**

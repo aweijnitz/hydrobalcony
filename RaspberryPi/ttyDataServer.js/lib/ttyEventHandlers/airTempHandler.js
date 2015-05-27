@@ -1,6 +1,6 @@
 
 var processData = function(eventData) {
-    return [eventData[0], (eventData[1]/1000).toFixed(1)];
+    return [eventData[0], parseFloat((eventData[1]/1000).toFixed(1))];
 };
 
 /**
@@ -11,7 +11,8 @@ var processData = function(eventData) {
 var handler = function (eventData, emitter, logger) {
     emitter.emit('data', {
         data: processData(eventData.data),
-        unit: 'C'
+        unit: 'C',
+        raw: eventData.data[1]
     });
 };
 
