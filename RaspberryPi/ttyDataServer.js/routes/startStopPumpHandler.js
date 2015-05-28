@@ -3,6 +3,13 @@ var util = require('util');
 var latestCommand = '';
 var pumpCtrl = null;
 
+var isSafeMessage = function isSafeMessage(msg) {
+    if(!!msg && !(!!msg.data && (msg.data[0] === 'pump')))
+        return false;
+    return true;
+};
+
+
 
 /**
  * Return handler for API request to control pump. Certain conditions apply.
@@ -23,10 +30,11 @@ var handleReq = function (appConf, log4js) {
         logger.debug('pumpcontrol route invoked. action: ' + req.params.action);
 
         var keyOk = (req.query.key === controlKey);
+//	logger.debug('keys:', req.query.key, controlKey); 
         var action = req.params.action || false;
         var tty = req.app.get('tty');
         var pumpCallback = function (err) {
-            if (!!err)
+            if (!isSafeMessage(err))
                 res.status(502).json({status: 'Could not write to device!'});
             else {
                 latestCommand = action;
