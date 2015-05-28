@@ -19,7 +19,7 @@ var timeStampEvt = function(evt) {
 
 logger.info('Preparing server start.');
 appConf.controlKey = process.env.HYDRO_CONTROL_KEY || false;
-appConf.controlEnabled = process.env.HYDRO_CONTROL || false;
+appConf.controlEnabled = process.env.HYDRO_CONTROL || true;
 
 !!appConf.controlEnabled ? logger.info('Control key found.') : logger.warn('No control enabling found. System in READ ONLY mode.');
 
