@@ -5,7 +5,7 @@ Hydroponic control and monitoring for single pump NFT system.
 [Summary of parts](https://gist.github.com/aweijnitz/cc7b44bf7908728e9baa)
 
 ## The Rig
-[The rig](http://i.imgur.com/T3ySmOS.jpg)
+![The rig](http://i.imgur.com/T3ySmOS.jpg)
  
 ## Timelapse (updated every hour)
 [Timelapse](http://hydro.weekendhack.it/timelapse.mp4)
