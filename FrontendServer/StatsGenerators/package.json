@@ -1,0 +1,19 @@
+{
+  "name": "stats_generators",
+  "version": "0.0.1",
+  "description": "Scripts to generate stats for the hydro balcony.",
+  "main": "hydrostats.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anders Weijnitz",
+  "license": "MIT",
+  "dependencies": {
+    "exit": "^0.1.2",
+    "fs-extra": "^0.18.4",
+    "log4js": "^0.6.25",
+    "minimist": "^1.1.1",
+    "moment": "^2.10.3",
+    "rethinkdb": "^2.0.0-1"
+  }
+}
