@@ -48,9 +48,11 @@ var SensorDataClient = function SensorDataClient(dataServer, log4js) {
     this.logger = log4js.getLogger('SensorDataClient');
     this.logger.debug('Creating new sensor data client');
     this.dataServer = dataServer;
+    this.cache = require('./util/dataCache.js')({}, log4js);
+
 
     if (!!singleton)
-        this.logger.warn('Multiple SensorDataClient instances created. There can only be one!');
+        this.logger.warn('Multiple SensorDataClient instances created. There can only be one! Keeping old instance.');
     else
         singleton = this;
 };
@@ -69,9 +71,13 @@ SensorDataClient.prototype.connect = function connect() {
     });
     socket.on('data', function (evt) {
 //        that.logger.debug('Got ' + util.inspect(evt));
-        that.emit('data', normalize(evt));
+        var data = normalize(evt);
+        that.cache.put(data.name, data);
+        that.emit('data', data);
     });
     socket.on('pump', function (evt) {
+        var data = normalize(evt);
+        that.cache.put(data.name, data);
         that.emit('pump', normalize(evt));
     });
     socket.on('disconnect', function () {

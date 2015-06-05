@@ -50,8 +50,12 @@ var endpointConnect = function endpointConnect(sensorClient, storeEvent, io, log
 //	    logger.debug('should broadcast data ', shouldBroadcast(evt), evt);
             if (shouldBroadcast(evt))
                 broadcast('data', evt, io);
+
+            if (!wasStored)
+                logger.error('Failed to store event');
+
         }, function storeError(err) {
-            logger.error('Failed to store event');
+            logger.error('Failed to store event.', util.inspect(err));
         });
     });
     sensorClient.on('pump', function onPump(evt) {
@@ -59,7 +63,7 @@ var endpointConnect = function endpointConnect(sensorClient, storeEvent, io, log
 //	    logger.debug('broadcasting pump ', evt)
             broadcast('pump', evt, io);
         }, function storeError(err) {
-            logger.error('Failed to store event');
+            logger.error('Failed to store pump event', util.inspect(err));
         });
     });
     sensorClient.connect();
