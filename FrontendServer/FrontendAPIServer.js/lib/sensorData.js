@@ -4,6 +4,7 @@
 
 var util = require('util');
 var Q = require('q');
+var moment = require('moment');
 
 
 // Db connection. singleton
@@ -43,20 +44,39 @@ var connectDb = function (dbConf) {
  * @param logger
  * @returns {*}
  */
-var selectInDb = function (name, limit, rdb, dbName, tableName, logger) {
-    logger.debug('loading ', name, limit);
+var selectInDb = function (name, timeWindow, fromDate, toDate, r, dbName, tableName, logger) {
     var deferred = Q.defer();
-    rdb.db(dbName).table(tableName).orderBy({index: rdb.desc('timestamp')})
-        .filter(rdb.row('name').eq(name))
-        .limit(limit)
-        .pluck('timestamp', 'value')
-        .then(function (res) {
-            logger.debug('results ', res.length);
-            deferred.resolve(res);
-        }).error(function (err) {
-            logger.error(util.inspect(err));
-            deferred.reject(new Error('Could not load sensor data. Err:' + util.inspect(err)));
-        });
+
+    if (timeWindow > 0) {
+        logger.debug('loading for timeWindow', name, timeWindow);
+        r.db(dbName).table(tableName).orderBy({index: r.desc('timestamp')})
+            .filter(r.row('timestamp').during(r.now().add(-1 * timeWindow), r.now())
+                .and(r.row('name').eq(name)))
+            .pluck(['timestamp', 'value'])
+            .then(function (res) {
+                logger.debug('results ', res.length);
+                deferred.resolve(res);
+            }).error(function (err) {
+                logger.error(util.inspect(err));
+                deferred.reject(new Error('Could not load sensor data. Err:' + util.inspect(err)));
+            });
+    } else if(fromDate && moment.isDate(fromDate) && toDate && moment.isDate(toDate)) {
+        logger.debug('loading for date range', name, fromDate, toDate);
+        r.db(dbName).table(tableName).orderBy({index: r.desc('timestamp')})
+            .filter(r.row('timestamp').during(r.ISO8601(new Date(fromDate)), r.ISO8601(new Date(toDate)))
+                .and(r.row('name').eq(name)))
+            .pluck(['timestamp', 'value'])
+            .then(function (res) {
+                logger.debug('results ', res.length);
+                deferred.resolve(res);
+            }).error(function (err) {
+                logger.error(util.inspect(err));
+                deferred.reject(new Error('Could not load sensor data. Err:' + util.inspect(err)));
+            });
+    } else {
+        logger.error('Neither valid timeWindow or from and to dates provided.');
+        deferred.reject(new Error('Neither valid timeWindow or from and to dates provided'));
+    }
     return deferred.promise;
 };
 
@@ -68,14 +88,14 @@ var sensorDataFactory = function (appConf, log4js) {
     if (!rdb && appConf.app.storageStrategy === 'dbStore') {
         logger.info('Using DB Store. Connecting to db at ' + (appConf.app.dbStore.host || "127.0.0.1"));
         rdb = connectDb(appConf.app.dbStore);
-        selectFunction = function (name, limit) {
-            return selectInDb(name, limit, rdb, appConf.app.dbStore.dbName, appConf.app.dbStore.sensorTableName, logger);
+        selectFunction = function (name, limit, fromDate, toDate) {
+            return selectInDb(name, limit, fromDate, toDate, rdb, appConf.app.dbStore.dbName, appConf.app.dbStore.sensorTableName, logger);
         };
     } else
         throw new Error('no dbStore configured in appConfig.json!');
 
 
-    return function sensorData(name, limit) {
+    return function sensorData(name, timeWindow) {
         if (name instanceof Array) {
             // Query DB once for each sensor name in the name[] array
             // then combine the results into one multi-value array.
@@ -83,7 +103,7 @@ var sensorDataFactory = function (appConf, log4js) {
             var deferred = Q.defer();
             var promises = [];
             name.forEach(function (sensorName) {
-                promises.push(selectFunction(sensorName, limit));
+                promises.push(selectFunction(sensorName, timeWindow));
             });
             Q.all(promises).then(function combine(res) {
                 //logger.debug('COMBINE', res);
@@ -101,7 +121,7 @@ var sensorDataFactory = function (appConf, log4js) {
             return deferred.promise;
         }
         else
-            return selectFunction(name, limit);
+            return selectFunction(name, timeWindow);
     };
 };
 

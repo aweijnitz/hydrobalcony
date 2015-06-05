@@ -20,7 +20,7 @@ var request = require('superagent');
 
 var dbConf = require('../FrontendAPIServer.js/conf/appConfig.json').app.dbStore;
 var smsConf = require('./conf/smsconf.json');
-var timeoutSecs = 180;
+var timeoutSecs = 300;
 
 var connectDb = function (dbConf) {
     var dbHost = dbConf.host || "localhost";
