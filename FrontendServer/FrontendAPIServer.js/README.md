@@ -10,15 +10,19 @@ An Express4 server that subscribes to the websockets events emitted from the [tt
 	npm test
 
 ## HTTP API
-There is a small REST-like API to get data from the server.
+There is a small REST-like API to get the latest data seen.
 
 ### latest sensor readings
 As data comes in, it is cached in RAM. Cached data will normally be available for all sensors, 
-but can be missing for a few minutes, following a restart of the server. 
+but it can be missing for a few minutes directly following a restart of the service. 
 
 **API: Get latest value for sensor**
 
 GET http://HOST/latest/sensorname yields the latest value for the sensor 
+
+**Example response**
+
+```{"name":"airTemp","value":23.12,"raw":"2312","timestamp":"2015-06-05T20:35:09.158Z","unit":"C"}```
 
 **Examples:**
 
@@ -34,17 +38,13 @@ GET http://HOST/latest/sensorname yields the latest value for the sensor
 
 - http://localhost:7979/latest/lightLevel
 
-**Example response**
-
-```{"name":"airTemp","value":23.12,"raw":"2312","timestamp":"2015-06-05T20:35:09.158Z","unit":"C"}```
-
-**API: Get all sensoradata during a specified time interval or duration**
+**API: Get all sensora data during a specified time interval or duration**
 
 GET http://HOST/sensordata/sensorname?from=fromDate&to=toDate
 
 
 ## WebSocket events
-In addition to the REST-like polling based API, there are push-based events being emitted using socket.io
+In addition to the REST-like API, there are push-based events being emitted using [socket.io](http://socket.io/)
 as data comes in.
 
 There are two kinds of events
