@@ -9,6 +9,52 @@ An Express4 server that subscribes to the websockets events emitted from the [tt
 ## Run tests
 	npm test
 
+## HTTP API
+There is a small REST-like API to get data from the server.
+
+### latest sensor readings
+As data comes in, it is cached in RAM. Cached data will normally be available for all sensors, 
+but can be missing for a few minutes, following a restart of the server. 
+
+**API: Get latest value for sensor**
+
+GET http://HOST/latest/sensorname yields the latest value for the sensor 
+
+**Examples:**
+
+- http://localhost:7979/latest/airTemp
+
+- http://localhost:7979/latest/waterTemp
+
+- http://localhost:7979/latest/waterLevel
+
+- http://localhost:7979/latest/pumpCurrent
+
+- http://localhost:7979/latest/airPressure
+
+- http://localhost:7979/latest/lightLevel
+
+**Example response**
+
+```{"name":"airTemp","value":23.12,"raw":"2312","timestamp":"2015-06-05T20:35:09.158Z","unit":"C"}```
+
+**API: Get all sensoradata during a specified time interval or duration**
+
+GET http://HOST/sensordata/sensorname?from=fromDate&to=toDate
+
+
+## WebSocket events
+In addition to the REST-like polling based API, there are push-based events being emitted using socket.io
+as data comes in.
+
+There are two kinds of events
+
+```data``` - emitted as sensor data comes in. The payload is a JSON object with the sensor reading.
+ 
+```pump``` - emitted as the pump activates and deactivates. The payload is a JSON object with the pump state.
+ 
+
+
 ## Query RethinkDB
 	sudo npm install -g recli
 	recli (then something like: r.db('hydro').table('sensordata').count())

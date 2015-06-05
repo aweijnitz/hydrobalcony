@@ -95,7 +95,7 @@ var sensorDataFactory = function (appConf, log4js) {
         throw new Error('no dbStore configured in appConfig.json!');
 
 
-    return function sensorData(name, timeWindow) {
+    return function sensorData(name, timeWindow, fromDate, toDate) {
         if (name instanceof Array) {
             // Query DB once for each sensor name in the name[] array
             // then combine the results into one multi-value array.
@@ -103,7 +103,7 @@ var sensorDataFactory = function (appConf, log4js) {
             var deferred = Q.defer();
             var promises = [];
             name.forEach(function (sensorName) {
-                promises.push(selectFunction(sensorName, timeWindow));
+                promises.push(selectFunction(sensorName, timeWindow, fromDate, toDate));
             });
             Q.all(promises).then(function combine(res) {
                 //logger.debug('COMBINE', res);
@@ -121,7 +121,7 @@ var sensorDataFactory = function (appConf, log4js) {
             return deferred.promise;
         }
         else
-            return selectFunction(name, timeWindow);
+            return selectFunction(name, timeWindow, fromDate, toDate);
     };
 };
 

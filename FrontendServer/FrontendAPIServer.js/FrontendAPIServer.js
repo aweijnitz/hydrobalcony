@@ -93,6 +93,7 @@ prepServerStart(app).then(function (result) {
         socket.emit('clientConnect', {msg: 'Welcome to the Hydrouino Dream Garden!'});
     });
     app.set('socket.io', io);
+    app.set('trust proxy', true); // See http://expressjs.com/guide/behind-proxies.html
 
     logger.info('Connecting to sensor data endpoint');
     endpointConnect(sensorClient, storeEvent, io, logger);
