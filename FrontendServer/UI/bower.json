@@ -2,5 +2,7 @@
   "name": "ui",
   "private": true,
   "dependencies": {
+    "angular": "~1.4.0",
+    "angular-justgage": "~1.0.1"
   }
 }

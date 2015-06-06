@@ -23,7 +23,7 @@
   your browser</a> to improve your experience.</p>
 <![endif]-->
 
-<div id="wrapper">
+<div id="wrapper" ng-app="dashboardApp">
 
   <!-- Sidebar -->
   <div id="sidebar-wrapper">
@@ -57,11 +57,52 @@
   <div id="page-content-wrapper">
 
     <div class="container-fluid">
-      <a href="#menu-toggle" class="btn btn-default" id="menu-toggle"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+      <div class="navbar navbar-fixed">
+          <a href="#menu-toggle" class="btn btn-default pull-left" id="menu-toggle"><span
+            class="glyphicon glyphicon-menu-hamburger"></span></a>
+      </div>
 
+      <div class="row">
+        <div class="col col-md-5">
+          <div ng-controller="SensorGageCtrl" ng-init="init('airTemp')">
+            <just-gage id="airTemp" min=0 max=50 value="value" title="Air Temp (C)"></just-gage>
+          </div>
+        </div>
+        <div class="col col-md-5">
+          <div ng-controller="SensorGageCtrl" ng-init="init('waterTemp')">
+            <just-gage id="waterTemp" min=0 max=50 value="value" title="Water Temp (C)"></just-gage>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col col-md-5">
+          <div ng-controller="SensorGageCtrl" ng-init="init('waterLevel')">
+            <just-gage id="waterLevel" min=0 max=25 value="value" title="Water Level (cm)"></just-gage>
+          </div>
+        </div>
+        <div class="col col-md-5">
+          <div ng-controller="SensorGageCtrl" ng-init="init('lightLevel')">
+            <just-gage id="lightLevel" min=0 max=100 value="value" title="Light Level (%)"></just-gage>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col col-md-5">
+          <div ng-controller="SensorGageCtrl" ng-init="init('pumpCurrent')">
+            <just-gage id="pumpCurrent" min=0 max=800 value="value" title="Pump Current (mA)"></just-gage>
+          </div>
+        </div>
+        <div class="col col-md-5">
+          <div ng-controller="SensorGageCtrl" ng-init="init('airPressure')">
+            <just-gage id="airPressure" min=0 max=1200 value="value" title="Air Pressure (mBar)"></just-gage>
+          </div>
+        </div>
+      </div>
 
       <div class="footer">
-        <p><span class="glyphicon glyphicon-heart"></span> Grow Happy!</p>
+        <p><span class="glyphicon glyphicon-heart"></span>&nbsp;Grow Happy!</p>
       </div>
     </div>
     <!-- end container-fluid -->
@@ -72,6 +113,10 @@
 
 <!-- build:js(.) scripts/vendor.js -->
 <!-- bower:js -->
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/raphael/raphael.js"></script>
+<script src="bower_components/justgage-toorshia/justgage.js"></script>
+<script src="bower_components/angular-justgage/ng-justgage.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -102,13 +147,14 @@
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
 <!-- build:js({app,.tmp}) scripts/main.js -->
-<script src="scripts/main.js"></script>
+<script src="scripts/dashboardApp.js"></script>
+<script src="scripts/controllers/SensorGageCtrl.js"></script>
 <!-- endbuild -->
 
 
 <!-- Menu Toggle Script -->
 <script>
-  $("#menu-toggle").click(function(e) {
+  $("#menu-toggle").click(function (e) {
     e.preventDefault();
     $("#wrapper").toggleClass("toggled");
   });
