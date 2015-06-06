@@ -82,16 +82,16 @@
           </div>
         </div>
         <div class="col col-md-5">
-          <div ng-controller="SensorGageCtrl" ng-init="init('lightLevel')">
-            <just-gage id="lightLevel" min=0 max=100 value="value" title="Light Level (%)"></just-gage>
+          <div ng-controller="SensorGageCtrl" ng-init="init('pumpCurrent')">
+            <just-gage id="pumpCurrent" min=0 max=800 value="value" title="Pump Current (mA)"></just-gage>
           </div>
         </div>
       </div>
 
       <div class="row">
         <div class="col col-md-5">
-          <div ng-controller="SensorGageCtrl" ng-init="init('pumpCurrent')">
-            <just-gage id="pumpCurrent" min=0 max=800 value="value" title="Pump Current (mA)"></just-gage>
+          <div ng-controller="SensorGageCtrl" ng-init="init('lightLevel')">
+            <just-gage id="lightLevel" min=0 max=100 value="value" title="Light Level (%)"></just-gage>
           </div>
         </div>
         <div class="col col-md-5">
@@ -117,7 +117,7 @@
 <script src="bower_components/raphael/raphael.js"></script>
 <script src="bower_components/justgage-toorshia/justgage.js"></script>
 <script src="bower_components/angular-justgage/ng-justgage.js"></script>
-<script src="bower_components/angular-socket-io/socket.min.js"></script>
+<script src="bower_components/angular-socket-io/socket.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 

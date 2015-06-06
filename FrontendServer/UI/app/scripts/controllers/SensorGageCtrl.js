@@ -1,15 +1,17 @@
-app.controller('SensorGageCtrl', function ($scope) {
-  $scope.value = 10;
-  $scope.init = function(name)
-  {
+app.controller('SensorGageCtrl', function ($scope, socket) {
+  $scope.value = 0;
+  $scope.init = function(name) {
     //This function is sort of private constructor for controller
     $scope.title = name;
     $scope.sensorName = name;
 
-    console.log('sensor: ' + name);
-    //Based on passed argument you can make a call to resource
-    //and initialize more objects
-    //$resource.getMeBond(007)
+  //  console.log('sensor: ' + name);
+    socket.on('data', function (msg) {
+      if(name === msg.name) {
+//        console.log($scope.sensorName + ' - ' + JSON.stringify(msg));
+        $scope.value = msg.value;
+      }
+    });
   };
 
 });
