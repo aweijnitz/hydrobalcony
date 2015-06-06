@@ -7,7 +7,7 @@ var app = angular.module("dashboardApp", ['btford.socket-io', 'ngJustGage', 'ngR
       ioSocket: io.connect(host, opts)
     });
   })
-  .config(function ($routeProvider) {
+  .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/dashboard.html'
@@ -25,4 +25,4 @@ var app = angular.module("dashboardApp", ['btford.socket-io', 'ngJustGage', 'ngR
       .otherwise({
         redirectTo: '/'
       });
-  });
+  }]);

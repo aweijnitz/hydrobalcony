@@ -1,4 +1,4 @@
-app.controller('ScheduleCtrl', function ($scope, $http) {
+app.controller('ScheduleCtrl', ['$scope','$http',function ($scope, $http) {
   $http.get('http://hydro.homelinux.net/pumpschedule?count=24&format=json').
     success(function (data, status, headers, config) {
       var dates = data.map(function (d) {
@@ -14,4 +14,4 @@ app.controller('ScheduleCtrl', function ($scope, $http) {
       // or server returns response with an error status.
     });
 
-});
+}]);

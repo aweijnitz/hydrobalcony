@@ -1,4 +1,4 @@
-app.controller('SensorGageCtrl', function ($scope, $http, socket) {
+app.controller('SensorGageCtrl', ['$scope','$http','socket',function ($scope, $http, socket) {
   $scope.value = 0;
   $scope.init = function(name) {
     //This function is sort of private constructor for controller
@@ -22,4 +22,4 @@ app.controller('SensorGageCtrl', function ($scope, $http, socket) {
 
   };
 
-});
+}]);
