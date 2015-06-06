@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col col-md-5">
+    <div ng-controller="SensorGageCtrl" ng-init="init('airTemp')">
+      <just-gage id="airTemp" min=0 max=50 value="value" title="Air Temp (C)"></just-gage>
+    </div>
+  </div>
+  <div class="col col-md-5">
+    <div ng-controller="SensorGageCtrl" ng-init="init('waterTemp')">
+      <just-gage id="waterTemp" min=0 max=50 value="value" title="Water Temp (C)"></just-gage>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col col-md-5">
+    <div ng-controller="SensorGageCtrl" ng-init="init('waterLevel')">
+      <just-gage id="waterLevel" min=0 max=25 value="value" title="Water Level (cm)"></just-gage>
+    </div>
+  </div>
+  <div class="col col-md-5">
+    <div ng-controller="SensorGageCtrl" ng-init="init('pumpCurrent')">
+      <just-gage id="pumpCurrent" min=0 max=800 value="value" title="Pump Current (mA)"></just-gage>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col col-md-5">
+    <div ng-controller="SensorGageCtrl" ng-init="init('lightLevel')">
+      <just-gage id="lightLevel" min=0 max=100 value="value" title="Light Level (%)"></just-gage>
+    </div>
+  </div>
+  <div class="col col-md-5">
+    <div ng-controller="SensorGageCtrl" ng-init="init('airPressure')">
+      <just-gage id="airPressure" min=0 max=1200 value="value" title="Air Pressure (mBar)"></just-gage>
+    </div>
+  </div>
+</div>

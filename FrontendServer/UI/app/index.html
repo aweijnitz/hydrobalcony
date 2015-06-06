@@ -12,6 +12,8 @@
   <!-- endbower -->
   <!-- endbuild -->
   <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.4/readable/bootstrap.min.css" rel="stylesheet">
+  <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
+  <script src="//vjs.zencdn.net/4.12/video.js"></script>
   <!-- build:css(.tmp) styles/main.css -->
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles/lib/sidebar_menu.css">
@@ -29,21 +31,21 @@
   <div id="sidebar-wrapper">
     <ul class="sidebar-nav">
       <li class="sidebar-brand">
-        <a href="#">
+        <a href="#dashboard">
           Hydroponic Menu
         </a>
       </li>
       <li>
-        <a href="#">Live Dashboard</a>
+        <a href="#dashboard">Live Dashboard</a>
       </li>
       <li>
-        <a href="#">Pump schedule</a>
+        <a href="#schedule">Pump schedule</a>
       </li>
       <li>
-        <a href="#">Webcam</a>
+        <a href="#webcam">Webcam</a>
       </li>
       <li>
-        <a href="#">Timelapse</a>
+        <a href="#timelapse">Timelapse</a>
       </li>
       <li>
         <a href="http://hydro.weekendhack.it">About</a>
@@ -62,44 +64,8 @@
             class="glyphicon glyphicon-menu-hamburger"></span></a>
       </div>
 
-      <div class="row">
-        <div class="col col-md-5">
-          <div ng-controller="SensorGageCtrl" ng-init="init('airTemp')">
-            <just-gage id="airTemp" min=0 max=50 value="value" title="Air Temp (C)"></just-gage>
-          </div>
-        </div>
-        <div class="col col-md-5">
-          <div ng-controller="SensorGageCtrl" ng-init="init('waterTemp')">
-            <just-gage id="waterTemp" min=0 max=50 value="value" title="Water Temp (C)"></just-gage>
-          </div>
-        </div>
-      </div>
+      <div ng-view=""></div>
 
-      <div class="row">
-        <div class="col col-md-5">
-          <div ng-controller="SensorGageCtrl" ng-init="init('waterLevel')">
-            <just-gage id="waterLevel" min=0 max=25 value="value" title="Water Level (cm)"></just-gage>
-          </div>
-        </div>
-        <div class="col col-md-5">
-          <div ng-controller="SensorGageCtrl" ng-init="init('pumpCurrent')">
-            <just-gage id="pumpCurrent" min=0 max=800 value="value" title="Pump Current (mA)"></just-gage>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col col-md-5">
-          <div ng-controller="SensorGageCtrl" ng-init="init('lightLevel')">
-            <just-gage id="lightLevel" min=0 max=100 value="value" title="Light Level (%)"></just-gage>
-          </div>
-        </div>
-        <div class="col col-md-5">
-          <div ng-controller="SensorGageCtrl" ng-init="init('airPressure')">
-            <just-gage id="airPressure" min=0 max=1200 value="value" title="Air Pressure (mBar)"></just-gage>
-          </div>
-        </div>
-      </div>
 
       <div class="footer">
         <p><span class="glyphicon glyphicon-heart"></span>&nbsp;Grow Happy!</p>
@@ -118,6 +84,8 @@
 <script src="bower_components/justgage-toorshia/justgage.js"></script>
 <script src="bower_components/angular-justgage/ng-justgage.js"></script>
 <script src="bower_components/angular-socket-io/socket.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/moment/moment.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 
@@ -143,12 +111,13 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
 <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
+
 
 <!-- build:js({app,.tmp}) scripts/main.js -->
 <script src="scripts/dashboardApp.js"></script>
 <script src="scripts/controllers/SensorGageCtrl.js"></script>
+<script src="scripts/controllers/ScheduleCtrl.js"></script>
 <!-- endbuild -->
 
 

@@ -4,6 +4,8 @@
   "dependencies": {
     "angular": "~1.4.0",
     "angular-justgage": "~1.0.1",
-    "angular-socket-io": "~0.7.0"
+    "angular-socket-io": "~0.7.0",
+    "angular-route": "~1.4.0",
+    "moment": "~2.10.3"
   }
 }

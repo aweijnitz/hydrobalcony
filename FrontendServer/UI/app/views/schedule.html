@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-md-8">
+    <h1>Pump Schedule</h1>
+    <p>A 12V pump supplies nutrient water to the plants at set times.
+      Follow the ampere meter on the dashboard and watch the pump run. These are the coming pump times.</p>
+    <p>All times are in local German time (UTC+2h, summer time).</p>
+  </div>
+</div>
+<div class="row">
+  <ul class="list-group" >
+    <li class="list-group-item" ng-repeat="s in schedule">{{s}}</li>
+  </ul>
+</div>
