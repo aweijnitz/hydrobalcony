@@ -2,11 +2,11 @@ var host = 'http://hydro.weekendhack.it'; // TODO: Move to conf
 var opts = {path: '/dashboard/socket.io'}; // TODO: Move to conf
 
 var app = angular.module("dashboardApp", ['btford.socket-io', 'ngJustGage', 'ngRoute'])
-  .factory('socket', function (socketFactory) {
+  .factory('socket', ['socketFactory',function (socketFactory) {
     return socketFactory({
       ioSocket: io.connect(host, opts)
     });
-  })
+  }])
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
       .when('/', {
