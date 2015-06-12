@@ -1,6 +1,8 @@
 # FrontendAPIServer.js
-An Express4 server that subscribes to the websockets events emitted from the [ttyDataServer](https://github.com/aweijnitz/hydrobalcony/tree/master/RaspberryPi/ttyDataServer.js) and processes them.
+An Express4 server that subscribes to the websockets events emitted from 
+the [ttyDataServer](https://github.com/aweijnitz/hydrobalcony/tree/master/RaspberryPi/ttyDataServer.js) and processes them.
 
+Exposes API for sensor data and emits websocket events.
 
 ## Install
 	sudo npm install
@@ -10,9 +12,9 @@ An Express4 server that subscribes to the websockets events emitted from the [tt
 	npm test
 
 ## HTTP API
-There is a small REST-like API to get the latest data seen.
+There is a small REST-like API to get the latest data.
 
-### latest sensor readings
+### Note on sensor readings
 As data comes in, it is cached in RAM. Cached data will normally be available for all sensors, 
 but it can be missing for a few minutes directly following a restart of the service. 
 
@@ -53,13 +55,33 @@ There are two kinds of events
  
 ```pump``` - emitted as the pump activates and deactivates. The payload is a JSON object with the pump state.
  
+**Example use**
+
+    var host = 'http://hydro.weekendhack.it'; 
+    var opts = {path: '/dashboard/socket.io'};
+    var socket = io.connect(host, opts);
+    socket.on('data', function (data) {
+      console.log(data);
+    });
 
 
-## Query RethinkDB
+
+**Server startup**
+	
+<img src="http://mildly-interesting.info/images/startShutown.png" alt="Server startup" style="width:640px;">	
+
+
+## Datastore: RethinkDB
+
+All sensor data is stored as JSON objects in a a RethinkDB database. All, but the most basic queries are relatively
+slow and therefore run out-of-process to keep the server responsive. Typically these slow queries are for buidling 
+timeline graphs for sensor data.
+
+### Installing a RethinkDB command line client
 	sudo npm install -g recli
 	recli (then something like: r.db('hydro').table('sensordata').count())
 	
-### Notes for DB queries
+### Useful DB queries
 
 #### Create an index for timestamps
 
@@ -114,7 +136,4 @@ There are two kinds of events
 
     r.db('hydro').table('sensordata').filter(r.row('timestamp').month().eq(5).and(r.row('name').eq('waterTemp'))).min('value').pluck(['timestamp','value'])
 
-
-	
-<img src="http://mildly-interesting.info/images/startShutown.png" alt="Server startup" style="width:640px;">	
 	
