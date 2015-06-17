@@ -1,5 +1,7 @@
 # Monitoring 
 Collection of scripts used to check system health and to send SMS alerts when something happens.
+The [Clickatell SMS Gateway](https://www.clickatell.com/apis-scripts/apis/rest/) is used to send SMS:s.
+
 
 **Crontab entries**
 
@@ -8,6 +10,6 @@ Collection of scripts used to check system health and to send SMS alerts when so
     
 **Monitoring URLs**
 
-[DB](http://hydro.weekendhack.it/status/ok.html)
+[DB Status](http://hydro.weekendhack.it/status/ok.html)
 
-[Water Level](http://hydro.weekendhack.it/status/waterLevelOk.html)
+[Water Level Status](http://hydro.weekendhack.it/status/waterLevelOk.html)
