@@ -61,6 +61,7 @@ var processEvent = function processEvent(ttyData, eventEmitter, logger) {
         evt.data = translatePropName(ttyData.data);
         eventHandler(evt, emitter(eventEmitter, timeStamp(ttyData.time)), logger);
     } catch (e) {
+	logger.error('invalid message' + util.inspect(ttyData));
         logger.error(e);
     }
 
