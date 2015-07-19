@@ -55,11 +55,15 @@ var processEvent = function processEvent(ttyData, eventEmitter, logger) {
 
     try {
         var handlerPath = path.resolve(__dirname + '/ttyEventHandlers/' + handlerName);
-        var eventHandler = require(handlerPath);
-
-        var evt = {};
-        evt.data = translatePropName(ttyData.data);
-        eventHandler(evt, emitter(eventEmitter, timeStamp(ttyData.time)), logger);
+	if(fs.existsSync(handlerPath)) {
+            var eventHandler = require(handlerPath);
+            var evt = {};
+            evt.data = translatePropName(ttyData.data);
+            eventHandler(evt, emitter(eventEmitter, timeStamp(ttyData.time)), logger);
+	} else {
+	    logger.error('invalid message ' + util.inspect(ttyData));
+	    logger.error('handler file not found: ' + handlerPath);
+	}
     } catch (e) {
 	logger.error('invalid message' + util.inspect(ttyData));
         logger.error(e);
