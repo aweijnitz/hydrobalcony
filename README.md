@@ -12,7 +12,7 @@ there are sub-projects/folders for different parts of functionality.
 
 **Arduino:**
 
-The code is a regular sketch for the Arduino IDE. Bitlash is used to enable on-the-fy updates of configuration parameter.
+The code is a regular sketch for the Arduino IDE. Bitlash is used to enable on-the-fly updates of configuration parameter.
 
 **Raspberry Pi:** 
 
