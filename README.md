@@ -52,6 +52,7 @@ Currently five runs per hour, 40 seconds per run (the pump is a bit too powerful
 
 ![Later in the season](http://hydro.weekendhack.it/images/IMG_20150802_163316.jpg;h=720)
 
+
 # Sensors and controls
 ![sensors](https://docs.google.com/drawings/d/187NUvv8yzl_EJaqOleSDgmZCu7S9VLZEXMUmve4C4P4/pub?w=960&amp;h=720)
 
