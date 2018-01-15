@@ -50,7 +50,7 @@ Currently five runs per hour, 40 seconds per run (the pump is a bit too powerful
 ## The Rig
 ![The rig](http://i.imgur.com/T3ySmOS.jpg)
 
-![Later in the season](http://hydro.weekendhack.it/images/IMG_20150802_163316.jpg;h=720)
+![Later in the season](http://hydro.weekendhack.it/images/IMG_20150802_163316.jpg)
 
 
 # Sensors and controls
