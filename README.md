@@ -42,10 +42,6 @@ Currently five runs per hour, 40 seconds per run (the pump is a bit too powerful
 - Medium: Rockwool (tomato plant in Coco)
 - Nutrients: [Cellmax Hydro Grow ](http://www.hydroponics.eu/nutrients-and-additives-c-20/cellmax-s-25/cellmax-hydro-grow-2x1l-soft-water-1669.html) Two component solution mixed X+Y equal parts, 2ml/l (50% of recommended strength).
 
-## Homepage and Dashboard
-
-- [Homepage](http://hydro.weekendhack.it)
-- [Hydro Dashboard](http://hydro.weekendhack.it/dashboard)
 
 ## The Rig
 ![The rig](http://i.imgur.com/T3ySmOS.jpg)
