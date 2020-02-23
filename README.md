@@ -55,3 +55,18 @@ Currently five runs per hour, 40 seconds per run (the pump is a bit too powerful
 # System overview
 ![system overview](https://docs.google.com/drawings/d/1WWvZ8wsWjwgq-hmj79UxCswE7FLGIlY8i4sA85JrOd0/pub?w=960&amp;h=720)
 
+# Additional shots
+
+### Proud Owner and Operator
+
+![Proud Owner and Operator](https://xn--bitvergngen-0hb.de/pics/plantman-with-chilis.jpg)
+
+### Birdseye chilis and cherry tomatoes coming along 
+
+![Chilis and tomatos](https://xn--bitvergngen-0hb.de/pics/chilis-and-tomatos.jpg)
+
+### Early in the season
+
+Provisional setup, while prepping the main rig.
+
+![Seedlings](https://xn--bitvergngen-0hb.de/pics/seedlings.jpg)
