@@ -1,6 +1,8 @@
 # Hydrouino Dream Garden
 Hydroponic control and monitoring for single pump NFT system.
 
+Frontend hybrid app: https://github.com/aweijnitz/hydroApp
+
 ## Structure of this code repository
 This is the main repository for my hydroponic balcony garden. As can be seen in the figure below, it is 
 divided into three distinct parts, each representing an area of functionality. The structure of the respository
