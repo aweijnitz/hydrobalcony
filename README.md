@@ -48,7 +48,7 @@ Currently five runs per hour, 40 seconds per run (the pump is a bit too powerful
 ## The Rig
 ![The rig](http://i.imgur.com/T3ySmOS.jpg)
 
-![Later in the season](https://xn--bitvergngen-0hb.de/pics/hydro-2-aug-2015.jpg)
+![Later in the season](https://andersw.info/pics/hydro-2-aug-2015.jpg)
 
 
 # Sensors and controls
@@ -61,14 +61,14 @@ Currently five runs per hour, 40 seconds per run (the pump is a bit too powerful
 
 ### Proud Owner and Operator
 
-![Proud Owner and Operator](https://xn--bitvergngen-0hb.de/pics/plantman-with-chilis.jpg)
+![Proud Owner and Operator](https://andersw.info/pics/plantman-with-chilis.jpg)
 
 ### Birdseye chilis and cherry tomatoes coming along 
 
-![Chilis and tomatos](https://xn--bitvergngen-0hb.de/pics/chilis-and-tomatos.jpg)
+![Chilis and tomatos](https://andersw.info/pics/chilis-and-tomatos.jpg)
 
 ### Early in the season
 
 Provisional setup, while prepping the main rig.
 
-![Seedlings](https://xn--bitvergngen-0hb.de/pics/seedlings.jpg)
+![Seedlings](https:/andersw.info/pics/seedlings.jpg)
