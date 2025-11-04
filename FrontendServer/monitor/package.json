@@ -14,6 +14,6 @@
     "moment": "^2.10.3",
     "q": "^1.4.1",
     "rethinkdbdash": "^2.0.10",
-    "superagent": "^1.2.0"
+    "superagent": "^5.2.2"
   }
 }
